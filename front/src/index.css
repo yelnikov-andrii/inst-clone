@@ -1,0 +1,154 @@
+@import "tailwindcss";
+
+@theme {
+  --color-ig-badge: rgb(255, 48, 64);
+  --color-ig-banner-background: rgb(255, 255, 255);
+  --color-ig-banner-highlight-background: rgb(239, 239, 239);
+  --color-ig-bubble-background: rgb(255, 255, 255);
+  --color-ig-close-friends-refreshed: rgb(28, 209, 79);
+  --color-ig-dropdown-background: rgb(243, 245, 247);
+  --color-ig-elevated-background: rgb(255, 255, 255);
+  --color-ig-elevated-highlight-background: rgb(239, 239, 239);
+  --color-ig-elevated-separator: rgb(219, 219, 219);
+  --color-ig-error-or-destructive: rgb(237, 73, 86);
+  --color-ig-facebook-blue: rgb(53, 121, 234);
+  --color-ig-focus-stroke: rgb(168, 168, 168);
+  --color-ig-highlight-background: rgb(239, 239, 239);
+  --color-ig-hover-overlay: rgba(0, 0, 0, 0.05);
+  --color-ig-link: rgb(0, 55, 107);
+  --color-ig-live-badge: rgb(255, 1, 105);
+  --color-ig-primary-background: rgb(255, 255, 255);
+  --color-ig-primary-button: rgb(0, 149, 246);
+  --color-ig-primary-button-hover: rgb(24, 119, 242);
+  --color-ig-primary-icon: rgb(38, 38, 38);
+  --color-ig-primary-text: rgb(0, 0, 0);
+  --color-ig-secondary-background: rgb(250, 250, 250);
+  --color-ig-secondary-button: rgb(38, 38, 38);
+  --color-ig-secondary-button-background: rgb(239, 239, 239);
+  --color-ig-secondary-button-hover: rgb(219, 219, 219);
+  --color-ig-tertiary-button-background: rgb(255, 255, 255);
+  --color-ig-tertiary-button-border: rgb(219, 219, 219);
+  --color-ig-tertiary-button-hover: rgb(245, 245, 245);
+  --color-ig-tertiary-button-text: rgb(38, 38, 38);
+  --color-ig-secondary-icon: rgb(142, 142, 142);
+  --color-ig-secondary-text: rgb(115, 115, 115);
+  --color-ig-separator: rgb(219, 219, 219);
+  --color-ig-stroke: rgb(219, 219, 219);
+  --color-ig-stroke-on-media: rgb(255, 255, 255);
+  --color-ig-subscribers-only: rgb(118, 56, 250);
+  --color-ig-success: rgb(88, 195, 34);
+  --color-ig-temporary-highlight: rgb(245, 251, 255);
+  --color-ig-tertiary-icon: rgb(199, 199, 199);
+  --color-ig-tertiary-text: rgb(199, 199, 199);
+  --color-ig-text-input-border-prism: rgb(219, 223, 228);
+  --color-ig-text-input-border-hover-prism: rgb(12, 16, 20);
+  --color-ig-text-on-color: rgb(255, 255, 255);
+  --color-ig-text-on-media: rgb(255, 255, 255);
+  --color-ig-toggle-background-on-prism: rgb(12, 16, 20);
+  --color-ig-toggle-background-off-prism: rgb(219, 223, 228);
+  --color-ig-toggle-background-disabled-on-prism: rgb(162, 170, 180);
+  --color-ig-toggle-background-disabled-off-prism: rgb(233, 237, 240);
+  --color-ig-toggle-outline-prism: rgb(219, 223, 228);
+  --color-ig-toggle-outline-disabled-prism: rgb(243, 245, 247);
+  --color-ig-stroke-prism: rgb(255, 255, 255);
+  --color-ig-stroke-disabled-on-prism: rgb(233, 237, 240);
+  --color-ig-stroke-disabled-off-prism: rgb(248, 249, 249);
+  --color-ig-button-borderless-text: rgb(65, 80, 247);
+  --color-ig-button-borderless-text--disabled: rgb(184, 205, 255);
+  --color-ig-button-borderless-text--hover: rgb(37, 54, 208);
+  --color-ig-button-borderless-text--pressed: rgb(31, 40, 173);
+  --color-ig-button-primary-background: rgb(74, 93, 249);
+  --color-ig-button-primary-background--disabled: rgb(184, 205, 255);
+  --color-ig-button-primary-background--hover: rgb(65, 80, 247);
+  --color-ig-button-primary-background--pressed: rgb(65, 80, 247);
+  --color-ig-button-primary-link-text: rgb(49, 67, 227);
+  --color-ig-button-primary-link-text--disabled: rgb(163, 188, 255);
+  --color-ig-button-primary-link-text--hover: rgb(37, 54, 208);
+  --color-ig-button-primary-link-text--pressed: rgb(31, 40, 173);
+  --color-ig-button-primary-text: rgb(255, 255, 255);
+  /* Цей колір був некоректним: white-00. Якщо це прозорий білий, замінимо на rgba(255, 255, 255, 0) */
+  --color-ig-button-primary-text--disabled: rgba(255, 255, 255, 0);
+  --color-ig-button-secondary-background: rgb(240, 242, 245);
+  --color-ig-button-secondary-background--disabled: rgb(220, 224, 229);
+  --color-ig-button-secondary-background--hover: rgb(231, 234, 238);
+  --color-ig-button-secondary-background--pressed: rgb(231, 234, 238);
+  --color-ig-button-secondary-link-text: rgb(12, 16, 20);
+  --color-ig-button-secondary-link-text--disabled: rgb(94, 100, 109);
+  --color-ig-button-secondary-link-text--hover: rgb(12, 16, 20);
+  --color-ig-button-secondary-link-text--pressed: rgb(12, 16, 20);
+  --color-ig-button-secondary-text: rgb(12, 16, 20);
+  --color-ig-button-secondary-text--disabled: rgb(94, 100, 109);
+  --color-ig-link-text: rgb(65, 80, 247);
+  --color-ig-input-border-primary: rgb(33, 35, 40);
+  --color-ig-input-border-secondary: rgb(219, 223, 228);
+  --color-ig-input-disabled-background-color: rgb(243, 245, 247);
+  --color-ig-input-text-and-icon-primary: rgb(12, 16, 20);
+  --color-ig-input-text-and-icon-secondary: rgb(106, 113, 122);
+  --color-ig-menu-background-color: rgb(248, 249, 249);
+  --color-ig-menu-text-color: rgb(12, 16, 20);
+  --color-ig-tab-underline-active: rgb(12, 16, 20);
+  --color-ig-tablist-border: rgb(219, 223, 228);
+  --color-ig-alert: rgb(224, 1, 13);
+  --color-ig-positive: rgb(0, 142, 40);
+  --color-chat-outgoing-message-bubble-background-color: #3797F0;
+
+  --breakpoint-sm: 480px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1160px;
+  --breakpoint-2xl: 1260px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  cursor: pointer;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  outline: none;
+}
+
+.right-shift {
+  right: calc(100% - 244px);
+}
+
+.right-shift-mini {
+  right: calc(100% - 72px);
+}
+
+@media (max-width: 1260px) {
+  .right-shift {
+    right: calc(100% - 72px);
+  }
+}
+
+@media (max-width: 768px) {
+  .right-shift {
+    right: 0;
+  }
+}
+
+.top-shift {
+  top: 0;
+}
+
+@media (max-width: 768px) {
+  .top-shift {
+    top: calc(100% - 72px);
+  }
+}
+
+.center {
+  @apply flex justify-center items-center;
+}
