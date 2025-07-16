@@ -1,19 +1,29 @@
 import React, { useState } from 'react'
 import AuthInput from '../ui/AuthInput'
-import AuthButton from '../ui/AuthButton';
 import AuthSeparator from '../ui/AuthSeparator';
 import AuthBorderlessButton from '../ui/AuthBorderlessButton';
 import { handleInputChange } from '../../utils/handleInputChange';
 import { LogoIcon } from '../icons';
+import { useAuth } from '../../hooks/useAuth';
+import { url } from '../../utils/url';
+import SubmitButtonBlock from './SubmitButtonBlock';
+import ErrorBlock from './ErrorBlock';
 
 const MainForm = ({ mini }: { mini?: boolean }) => {
   const [data, setData] = useState({
     login: '',
     password: ''
   });
+  const { auth, loading, error, setError } = useAuth();
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setError('');
     handleInputChange(e, setData);
+  }
+
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    auth(`${url}/login`, { login: data.login, password: data.password })
   }
 
   return (
@@ -21,7 +31,7 @@ const MainForm = ({ mini }: { mini?: boolean }) => {
       <p className='mb-10 text-2xl px-[40px]'>
         <LogoIcon />
       </p>
-      <form className='flex flex-col gap-2 items-center'>
+      <form className='flex flex-col gap-2 items-center' onSubmit={handleSubmit}>
         <div className='px-[40px] w-full'>
           <AuthInput
             value={data.login}
@@ -35,14 +45,20 @@ const MainForm = ({ mini }: { mini?: boolean }) => {
           <AuthInput
             value={data.password}
             onChange={handleChange}
-            name="login"
+            name="password"
             type='password'
             placeholder="Пароль"
           />
         </div>
         <div className='px-[40px] w-full'>
-          <AuthButton title='Увійти' primary />
+          <SubmitButtonBlock
+            text='Увійти'
+            loading={loading}
+          />
         </div>
+        {error && (
+          <ErrorBlock error={error} />
+        )}
         {mini && (
           <button className='text-center text-black text-sm hover:underline font-semibold'>
             Зберегти дані для входу

@@ -49,7 +49,7 @@ const Recomendations = ({ mini }: { mini?: boolean }) => {
             </div>
             <div className="mb-2 flex flex-col gap-6">
                 {users.map(user => (
-                    <div className="flex justify-between items-center">
+                    <div className="flex justify-between items-center" key={user.id}>
                         <div className="flex gap-1 items-center">
                             <img
                                 src={user.icon}

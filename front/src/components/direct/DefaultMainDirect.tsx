@@ -13,7 +13,9 @@ const DefaultMainDirect = () => {
                     Надсилайте приватні світлини та повідомлення другу або групі
                 </p>
                 <div className='max-w-[195px] text-sm'>
-                    <AuthButton title='Надіслати повідомлення' primary />
+                    <AuthButton primary>
+                        Надіслати повідомлення
+                    </AuthButton>
                 </div>
             </div>
         </div>

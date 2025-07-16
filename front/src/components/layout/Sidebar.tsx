@@ -11,6 +11,7 @@ import type { RootState } from '../../app/store'
 import SearchSIdeBlock from './SearchSIdeBlock'
 import NotificationsSideBlock from './NotificationsSideBlock'
 import clsx from 'clsx'
+import { useLogout } from '../../hooks/useLogOut'
 
 enum BlockNameEnum {
     SEARCH = 'search',
@@ -58,6 +59,12 @@ const Sidebar = ({ mini }: { mini?: boolean }) => {
         }
     }, [isOpen]);
 
+    const logout = useLogout();
+
+    function handleLogout() {
+        logout();
+    }
+
     return (
         <aside className={clsx('fixed right-0 z-30 overflow-x-hidden md:top-0 bottom-0 left-0 h-full pt-0 md:pt-10 border-r border-r-ig-separator border-t border-t-ig-separator bg-ig-secondary-background', {
             'right-shift top-shift': !mini,
@@ -102,6 +109,9 @@ const Sidebar = ({ mini }: { mini?: boolean }) => {
                     title={(isSidebarMini || mini) ? '' : 'Профіль'}
                     icon={<img src={UserIcon} className='w-[24px] h-[24px]' />}
                 />
+                <button onClick={handleLogout}>
+                    Logout
+                </button>
             </nav>
             <Drawer>
                 {blockName === 'search' ? <SearchSIdeBlock /> : blockName === 'notifications' ? <NotificationsSideBlock /> : null}

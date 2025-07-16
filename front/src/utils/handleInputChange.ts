@@ -2,12 +2,12 @@ import React from 'react';
 
 type Setter<T> = React.Dispatch<React.SetStateAction<T>>;
 
-export function handleInputChange<T extends Record<string, string>>(
+export function handleInputChange<any>(
   e: React.ChangeEvent<HTMLInputElement>,
   setState: Setter<T>
 ) {
   const { name, value } = e.target;
-  setState(prev => ({
+  setState((prev: any) => ({
     ...prev,
     [name]: value
   }));

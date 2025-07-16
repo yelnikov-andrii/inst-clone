@@ -1,3 +1,10 @@
+interface RegistrationDataI {
+    nickname: string;
+    login: string;
+    password: string;
+    fullname: string;
+}
+
 interface MessageI {
     id: number;
     sender_id: number;
