@@ -43,3 +43,26 @@ export const Token = sequelize.define('Insta_token', {
 User.hasOne(Token);
 Token.belongsTo(User);
 Token.sync();
+
+export const UserInfo = sequelize.define('insta_user_info', {
+    avatar: {
+        type: DataTypes.STRING
+    },
+    bio: {
+        type: DataTypes.TEXT
+    },
+    gender: {
+        type: DataTypes.STRING,
+    },
+    showRecommendations: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false
+    },
+    website: {
+        type: DataTypes.STRING
+    }
+})
+
+User.hasOne(UserInfo, { foreignKey: "userId" });
+UserInfo.belongsTo(User, { foreignKey: 'userId' });
+UserInfo.sync()
