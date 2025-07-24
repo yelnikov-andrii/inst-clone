@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useRef, useState } from 'react';
 import UserIcon from '../../../images/user-icon.jpg';
 import { useSelector } from 'react-redux';
@@ -11,78 +12,32 @@ import SwitcherShowRec from './SwitcherShowRec';
 import { url } from '../../../utils/url';
 import ErrorBlock from '../../auth/ErrorBlock';
 import Loader from '../../ui/Loader';
+import { useSendMyInfo } from '../../../hooks/useSendMyInfo';
+import Globalsnackbar from '../../common/Globalsnackbar';
 
 const Edit = () => {
-    const [avatar, setAvatar] = useState<string | null>(null);
     const user = useSelector((state: RootState) => state.auth.user);
-    const [bio, setBio] = useState('');
-    const [gender, setGender] = useState('other');
-    const [showRecommendations, setShowRecommendatons] = useState(false);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState('');
-    const [userInfo, setUserInfo] = useState();
+    const myInfo = useSelector((state: RootState) => state.myInfo.myInfo);
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [file, setFile] = useState<null | File>(null);
+    const { fetchingData, setFetchingData, sendUserInfo, snackbarMessage } = useSendMyInfo();
 
-    async function getUserInfo(userId: number) {
-        try {
-            const response = await fetch(`${url}/userinfo/${userId}`);
-            if (response.ok) {
-                const res = await response.json();
-                setUserInfo(res);
-                setBio(res.bio || "");
-                setAvatar(`${url}/${res.avatar}`);
-                setGender(res.gender || "other");
-                setShowRecommendatons(res.showRecommendations || false);
-            }
-        } catch (e) {
-            console.error(e);
-        }
-    }
+    const [userData, setUserData] = useState({
+        avatar: '',
+        bio: '',
+        gender: 'other',
+        showRecommendations: false,
+        website: ''
+    });
 
     useEffect(() => {
-        if (user) {
-            getUserInfo(user.id);
+        if (myInfo) {
+            setUserData(prev => ({ ...prev, bio: myInfo.bio, gender: myInfo.gender, showRecommendations: myInfo.showRecommendations, avatar: myInfo.avatar }))
         }
-
-    }, [user]);
-
-    async function sendUserInfo() {
-        const formData = new FormData();
-        if (file) {
-            formData.append('avatar', file);
-        }
-
-        if (user) {
-            formData.append('userId', user?.id.toString())
-        }
-
-        formData.append('bio', bio);
-        formData.append('gender', gender);
-        formData.append('showRecommendations', showRecommendations ? "true" : "false");
-        formData.append("website", "");
-
-        try {
-            setLoading(true);
-            const response = await fetch(`${url}/userinfo`, {
-                method: userInfo ? "PATCH" : "POST",
-                credentials: 'include',
-                body: formData
-
-            });
-
-            if (!response.ok) {
-                setError("Не вдалося оновити дані")
-            }
-        } catch (e) {
-            setError(e.message || "Помилка при відправці даних");
-        } finally {
-            setLoading(false);
-        }
-    }
+    }, [myInfo])
 
     function handleSend() {
-        sendUserInfo();
+        sendUserInfo(file, user, userData);
     }
 
     function handleAvatarClick() {
@@ -99,14 +54,28 @@ const Edit = () => {
         }
 
         setFile(selectedFile);
-        setAvatar(URL.createObjectURL(selectedFile));
+        setUserData(prev => ({ ...prev, avatar: URL.createObjectURL(selectedFile) }));
     }
 
     useEffect(() => {
-        if (loading === true) {
-            setError('');
+        if (fetchingData.loading === true) {
+            setFetchingData(prev => ({ ...prev, error: '' }));
         }
-    }, [loading]);
+    }, [fetchingData.loading]);
+
+    function changeDataHandler(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) {
+        const target = e.target;
+        const name = target.name;
+
+        if (target instanceof HTMLInputElement && target.type === 'checkbox') {
+            setUserData(prev => ({ ...prev, [name]: target.checked }));
+            return;
+        }
+
+        setUserData(prev => ({ ...prev, [name]: target.value }));
+    }
+
+    const avatarUrl = !userData.avatar.includes('http') ? `${url}/${userData.avatar}` : userData.avatar;
 
     return (
         <div className='w-full py-10 px-12'>
@@ -116,7 +85,7 @@ const Edit = () => {
             <div className='flex justify-between bg-ig-highlight-background p-4 rounded-lg items-center mb-16'>
                 <div className='flex gap-4 items-center'>
                     <img
-                        src={avatar ? avatar : UserIcon}
+                        src={avatarUrl ? avatarUrl : UserIcon}
                         alt='Фото користувача'
                         className='w-[56px] h-[56px] rounded-full object-cover cursor-pointer'
                         onClick={handleAvatarClick}
@@ -152,14 +121,14 @@ const Edit = () => {
                 <SubHeader>
                     Біографія
                 </SubHeader>
-                <BioTextArea value={bio} setValue={setBio} />
+                <BioTextArea value={userData.bio} onChange={changeDataHandler} />
             </div>
 
             <div className='mb-16'>
                 <SubHeader>
                     Стать
                 </SubHeader>
-                <GenderSelect value={gender} setValue={setGender} />
+                <GenderSelect value={userData.gender} onChange={changeDataHandler} />
                 <InfoText>
                     Ця інформація не буде показана у вашому публічному профілі.
                 </InfoText>
@@ -176,7 +145,7 @@ const Edit = () => {
                             Налаштуйте, чи можуть інші бачити рекомендації схожих облікових записів у вашому профілі й чи можна рекомендувати ваш обліковий запис в інших профілях.
                         </InfoText>
                     </div>
-                    <SwitcherShowRec value={showRecommendations} setValue={setShowRecommendatons} />
+                    <SwitcherShowRec value={userData.showRecommendations} onChange={changeDataHandler} />
                 </div>
             </div>
 
@@ -186,12 +155,15 @@ const Edit = () => {
                 </InfoText>
             </div>
             <div className='flex justify-end'>
-                <PrimaryButton title={loading ? <><Loader /></> : "Надіслати"} height={44} width={255} onClick={handleSend} />
+                <PrimaryButton title={fetchingData.loading ? <><Loader /></> : "Надіслати"} height={44} width={255} onClick={handleSend} />
             </div>
-            {error && (
+            {fetchingData.error && (
                 <div className='text-center mt-6'>
-                    <ErrorBlock error={error} />
+                    <ErrorBlock error={fetchingData.error} />
                 </div>
+            )}
+            {snackbarMessage && (
+                <Globalsnackbar text={snackbarMessage} />
             )}
         </div>
     )

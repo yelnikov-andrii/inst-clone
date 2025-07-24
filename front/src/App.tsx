@@ -14,16 +14,22 @@ import Activate from "./pages/Activate";
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "./app/store";
 import { useEffect } from "react";
-import { logIn } from "./features/auth/authSlice";
+import { logIn, setAuthLoaded } from "./features/auth/authSlice";
 import ProtectedRoute from "./components/common/ProtectedRoute";
 import Accounts from "./pages/Accounts";
 import Edit from "./components/accounts/edit/Edit";
 import Notifications from "./components/accounts/notifications/Notifications";
+import GlobalLoader from "./components/common/GlobalLoader";
+import PublicRoute from "./components/common/PubliRoute";
+import { useGetMe } from "./hooks/useGetMe";
 
 
 function App() {
   const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
+  const user = useSelector((state: RootState) => state.auth.user);
+  const isAuthLoaded = useSelector((state: RootState) => state.auth.isAuthLoaded);
   const dispatch = useDispatch();
+  const { getUserInfo } = useGetMe();
 
   useEffect(() => {
     const accessToken = localStorage.getItem('inst_accessToken');
@@ -33,20 +39,36 @@ function App() {
     if (userStr) {
       user = JSON.parse(userStr);
     }
-    
+
     if (accessToken && user) {
       dispatch(logIn({ accessToken, user }))
+    } else {
+      dispatch(setAuthLoaded());
     }
   }, []);
+
+  useEffect(() => {
+    if (user) {
+      getUserInfo(user.id);
+    }
+
+  }, [user]);
+
+  if (!isAuthLoaded) {
+    return (
+      <GlobalLoader />
+    )
+  }
 
   return (
     <Routes>
       <Route path="/" element={isAuthenticated ? <Home /> : <Auth />} />
 
-      <Route path="/accounts/emailsignup" element={<SignUp />} />
-      <Route path="/accounts/activation" element={<Activate />} />
-      <Route path="/accounts/login" element={<Login />} />
-      <Route path="/accounts" element={<Accounts />}>
+      <Route path="/accounts/emailsignup" element={<PublicRoute><SignUp /></PublicRoute>} />
+      <Route path="/accounts/activation" element={<PublicRoute><Activate /></PublicRoute>} />
+      <Route path="/accounts/login" element={<PublicRoute><Login /></PublicRoute>} />
+
+      <Route path="/accounts" element={<ProtectedRoute><Accounts /></ProtectedRoute>}>
         <Route path="edit" element={<Edit />} />
         <Route path="notifications" element={<Notifications />} />
       </Route>

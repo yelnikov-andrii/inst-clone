@@ -3,13 +3,15 @@ import counterReducer from '../features/counter/counterSlice';
 import drawerReducer from '../features/drawer/drawerReducer';
 import modalReducer from '../features/modal/modalSlice'
 import authReducer from '../features/auth/authSlice'
+import myInfoReducer from '../features/myInfo/myInfoSlice'
 
 export const store = configureStore({
   reducer: {
     counter: counterReducer,
     drawer: drawerReducer,
     modal: modalReducer,
-    auth: authReducer
+    auth: authReducer,
+    myInfo: myInfoReducer
   },
 })
 

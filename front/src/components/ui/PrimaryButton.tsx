@@ -7,7 +7,7 @@ const PrimaryButton = ({ mini, title, height, width, onClick = () => { } }: { mi
     }
 
     return (
-        <button className={clsx('transition-colors font-medium', {
+        <button className={clsx('transition-colors font-medium text-center flex justify-center items-center', {
             'text-ig-primary-button hover:text-ig-link text-[12px]': mini,
             'text-white bg-ig-primary-button hover:bg-ig-primary-button-hover text-sm py-1 px-2 rounded-md': !mini
         })}

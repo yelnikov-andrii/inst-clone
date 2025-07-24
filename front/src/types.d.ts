@@ -25,3 +25,11 @@ interface UserI {
     nickname: string;
     avatar: string;
 }
+
+interface MyInfoI {
+    avatar: string;
+    showRecommendations: boolean;
+    website: string;
+    bio: string;
+    gender: string;
+}
