@@ -12,6 +12,8 @@ import SearchSIdeBlock from './SearchSIdeBlock'
 import NotificationsSideBlock from './NotificationsSideBlock'
 import clsx from 'clsx'
 import { useLogout } from '../../hooks/useLogOut'
+import Avatar from '../common/Avatar'
+import { url } from '../../utils/url'
 
 enum BlockNameEnum {
     SEARCH = 'search',
@@ -24,6 +26,7 @@ const Sidebar = ({ mini }: { mini?: boolean }) => {
     const [blockName, setBlockName] = useState<BlockNameEnum | ''>(BlockNameEnum.SEARCH);
     const [isSidedbarBottom, setIsSidebarBottom] = useState(false);
     const [isSidebarMini, setIsSidebarMini] = useState(false);
+    const myInfo = useSelector((state: RootState) => state.myInfo.myInfo);
 
     function handleOpen(value: BlockNameEnum) {
         setBlockName(value);
@@ -107,7 +110,7 @@ const Sidebar = ({ mini }: { mini?: boolean }) => {
                 <SidebarLink
                     path='/profile'
                     title={(isSidebarMini || mini) ? '' : 'Профіль'}
-                    icon={<img src={UserIcon} className='w-[24px] h-[24px]' />}
+                    icon={<Avatar src={myInfo?.avatar ? `${url}/${myInfo?.avatar}` : ''} width={24} height={24} />}
                 />
                 <button onClick={handleLogout}>
                     Logout

@@ -4,12 +4,15 @@ import { openModal } from "../../features/modal/modalSlice";
 import SearchInput from "../layout/SearchInput";
 import type { RootState } from "../../app/store";
 import ModalForm from "../modalForm/ModalForm";
-import UserIcon from '../../images/user-icon.jpg'
 import UsersList from "./UsersList";
+import Avatar from "../common/Avatar";
+import { url } from "../../utils/url";
 
 const Inbox = ({ width }: { width: number }) => {
   const dispatch = useDispatch();
   const isOpen = useSelector((state: RootState) => state.modal.isOpen);
+  const user = useSelector((state: RootState) => state.auth.user);
+  const myInfo = useSelector((state: RootState) => state.myInfo.myInfo);
 
 
 
@@ -25,7 +28,7 @@ const Inbox = ({ width }: { width: number }) => {
         <div className="flex justify-between items-center mb-4">
           <div className="flex gap-1">
             <b className="text-lg text-black">
-              nickname
+              {user?.nickname}
             </b>
             <button onClick={handleOpen}>
               <ArrowDown />
@@ -39,11 +42,7 @@ const Inbox = ({ width }: { width: number }) => {
           <SearchInput />
         </div>
         <div className="flex flex-col mb-4">
-          <img
-            src={UserIcon}
-            alt="User icon"
-            className="w-[74px] h-[74px] rounded-full"
-          />
+          <Avatar src={myInfo?.avatar ? `${url}/${myInfo?.avatar}` : ''} width={74} height={74} />
           <p className="text-ig-secondary-text mt-2">
             Ваша нотатка
           </p>

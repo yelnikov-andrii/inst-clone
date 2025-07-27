@@ -7,7 +7,7 @@ import Direct from "./pages/Direct";
 import DefaultMainDirect from "./components/direct/DefaultMainDirect";
 import UserMainDirect from "./components/direct/UserMainDirect";
 import Profile from "./pages/Profile";
-import PostsDefault from "./components/profile/PostsDefault";
+import PostsDefault from "./components/profile/posts/PostsDefault";
 import Saved from "./components/profile/Saved";
 import Tagged from "./components/profile/Tagged";
 import Activate from "./pages/Activate";
