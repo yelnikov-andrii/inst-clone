@@ -66,3 +66,30 @@ export const UserInfo = sequelize.define('insta_user_info', {
 User.hasOne(UserInfo, { foreignKey: "userId" });
 UserInfo.belongsTo(User, { foreignKey: 'userId' });
 UserInfo.sync()
+
+export const Post = sequelize.define("insta_post", {
+    description: {
+        type: DataTypes.TEXT,
+        allowNull: true
+    }
+});
+
+Post.belongsTo(User, { foreignKey: "userId" });
+User.hasMany(Post, { foreignKey: 'userId' });
+Post.sync();
+
+export const PostMedia = sequelize.define("post_media", {
+    filename: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    type: {
+        type: DataTypes.STRING,
+        allowNull: false
+    }
+});
+
+Post.hasMany(PostMedia, { foreignKey: "postId"});
+PostMedia.belongsTo(Post, { foreignKey: 'postId'});
+
+PostMedia.sync();

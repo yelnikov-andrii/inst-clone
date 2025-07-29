@@ -1,20 +1,36 @@
 import React, { useEffect, useRef, useState, type Dispatch, type SetStateAction } from 'react'
-import { LeftArrow, MediaFilesIcon } from '../../icons'
+import { MediaFilesIcon } from '../../icons'
 import PrimaryButton from '../../ui/PrimaryButton'
-import InlineButton from '../../ui/InlineButton';
 import MediaSwiper from './MediaSwiper';
 import Modal from '../../ui/Modal';
 import DiscardBlock from './DiscardBlock';
 import TextBoxBlock from './TextBoxBlock';
 import clsx from 'clsx';
+import { useDragFiles } from '../../../hooks/useDragFiles';
+import Topbar from './Topbar';
+import { useCreatePost } from '../../../hooks/useCreatePost';
+import CreatingPostLoader from './CreatingPostLoader';
+
+interface PostStateI {
+    files: File[];
+    description: string;
+    textBoxIsOpen: boolean;
+}
 
 const CreatePost = ({ setAreFilesExist, openDiscard, setOpenDiscard }: { setAreFilesExist: Dispatch<SetStateAction<boolean>>, openDiscard: boolean, setOpenDiscard: Dispatch<SetStateAction<boolean>> }) => {
-    const [files, setFiles] = useState<File[]>([]);
+
     const fileInputRef = useRef<HTMLInputElement | null>(null);
-    const [isDragActive, setIsDragActive] = useState(false);
     const [discardModalIsOpen, setDiscardModalIsOpen] = useState(false);
-    const [textBoxIsOpen, setTextBoxIsOpen] = useState(false);
-    const [description, setDescription] = useState('');
+
+    const [post, setPost] = useState<PostStateI>({
+        files: [] as File[],
+        description: '',
+        textBoxIsOpen: false
+    });
+
+    const { isDragActive, handleDragLeave, handleDragOver, handleDrop } = useDragFiles(setPost);
+
+    const { createPost, loading, error, success } = useCreatePost();
 
     function handleselectFile() {
         if (fileInputRef.current) {
@@ -26,25 +42,8 @@ const CreatePost = ({ setAreFilesExist, openDiscard, setOpenDiscard }: { setAreF
         const selectedFiles = e.target.files;
         if (selectedFiles) {
             const filesArr = Array.from(selectedFiles);
-            setFiles(filesArr);
+            setPost(post => ({ ...post, files: filesArr }));
         }
-    }
-
-    function handleDrop(e: React.DragEvent<HTMLDivElement>) {
-        e.preventDefault();
-        setIsDragActive(false);
-        const selectedFiles = Array.from(e.dataTransfer.files);
-        setFiles(selectedFiles);
-    }
-
-    function handleDragOver(e: React.DragEvent<HTMLDivElement>) {
-        e.preventDefault();
-        setIsDragActive(true);
-    }
-
-    function handleDragLeave(e: React.DragEvent<HTMLDivElement>) {
-        e.preventDefault();
-        setIsDragActive(false);
     }
 
     function handleDiscardModalOpen() {
@@ -58,22 +57,21 @@ const CreatePost = ({ setAreFilesExist, openDiscard, setOpenDiscard }: { setAreF
     }
 
     function handleDiscardChanges() {
-        setFiles([]);
+        setPost({ files: [], description: '', textBoxIsOpen: false })
         closeDiscardModal();
-        setTextBoxIsOpen(false);
     }
 
-    function handleChangeDescription(e) {
-        setDescription(e.target.value);
+    function handleChangeDescription(e: React.ChangeEvent<HTMLTextAreaElement>) {
+        setPost(post => ({ ...post, description: e.target.value }));
     }
 
     useEffect(() => {
-        if (files.length > 0) {
+        if (post.files.length > 0) {
             setAreFilesExist(true);
         } else {
             setAreFilesExist(false);
         }
-    }, [files])
+    }, [post.files])
 
     useEffect(() => {
         if (openDiscard) {
@@ -82,6 +80,35 @@ const CreatePost = ({ setAreFilesExist, openDiscard, setOpenDiscard }: { setAreF
 
     }, [openDiscard])
 
+    if (loading) {
+        return (
+            <CreatingPostLoader
+              type="loading"
+              text="Поширення"
+            />
+        )
+    }
+
+    if (error) {
+        setAreFilesExist(false);
+        return (
+            <CreatingPostLoader
+              type="error"
+              text={error}
+            />
+        )
+    }
+
+    if (success) {
+        setAreFilesExist(false);
+        return (
+            <CreatingPostLoader
+              type="success"
+              text={success}
+            />
+        )
+    }
+
     return (
         <div
             className='px-4 pb-10 pt-2 rounded-lg bg-white flex flex-col items-center'
@@ -89,30 +116,31 @@ const CreatePost = ({ setAreFilesExist, openDiscard, setOpenDiscard }: { setAreF
             onDrop={handleDrop}
             onDragLeave={handleDragLeave}
         >
-            {files?.length > 0 ? (
-                <div className='flex justify-between mb-4 pb-4 w-full'>
-                    <button onClick={handleDiscardModalOpen}><LeftArrow /></button>
-                    {textBoxIsOpen ? (<InlineButton title='Поширити' onClick={() => {}} />) :  (<InlineButton title='Далі' onClick={() => setTextBoxIsOpen(true)} />)}
-                    
-                </div>
+            {post.files?.length > 0 ? (
+                <Topbar 
+                  textBoxIsOpen={post.textBoxIsOpen}
+                  back={handleDiscardModalOpen}
+                  next={() => setPost(post => ({ ...post, textBoxIsOpen: true }))}
+                  submit={() => { createPost(post)}}
+                />
             ) : (
                 <p className='font-semibold mb-15 pb-4 border-b border-b-ig-separator text-center'>
                     Створити допис
                 </p>
             )}
-            {files.length > 0 ? (
+            {post.files.length > 0 ? (
                 <div className={clsx('w-full', {
-                    'flex gap-4': textBoxIsOpen,
+                    'flex gap-4': post.textBoxIsOpen,
                 })}>
                     <div className={clsx('', {
-                        'w-full': !textBoxIsOpen,
-                        'w-full max-w-[60%]': textBoxIsOpen
+                        'w-full': !post.textBoxIsOpen,
+                        'w-full max-w-[60%]': post.textBoxIsOpen
                     })}>
-                        <MediaSwiper files={files} />
+                        <MediaSwiper files={post.files} />
                     </div>
-                    {textBoxIsOpen && (
+                    {post.textBoxIsOpen && (
                         <div className='w-80'>
-                            <TextBoxBlock value={description} onChange={handleChangeDescription} />
+                            <TextBoxBlock value={post.description} onChange={handleChangeDescription} />
                         </div>
                     )}
                 </div>

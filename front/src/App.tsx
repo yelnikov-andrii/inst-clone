@@ -7,7 +7,6 @@ import Direct from "./pages/Direct";
 import DefaultMainDirect from "./components/direct/DefaultMainDirect";
 import UserMainDirect from "./components/direct/UserMainDirect";
 import Profile from "./pages/Profile";
-import PostsDefault from "./components/profile/posts/PostsDefault";
 import Saved from "./components/profile/Saved";
 import Tagged from "./components/profile/Tagged";
 import Activate from "./pages/Activate";
@@ -22,6 +21,7 @@ import Notifications from "./components/accounts/notifications/Notifications";
 import GlobalLoader from "./components/common/GlobalLoader";
 import PublicRoute from "./components/common/PubliRoute";
 import { useGetMe } from "./hooks/useGetMe";
+import Posts from "./components/profile/posts/Posts";
 
 
 function App() {
@@ -79,7 +79,7 @@ function App() {
       </Route>
 
       <Route path="/:nickname" element={<ProtectedRoute><Profile /></ProtectedRoute>}>
-        <Route index element={<PostsDefault />} />
+        <Route index element={<Posts />} />
         <Route path="/:nickname/saved" element={<Saved />} />
         <Route path="/:nickname/tagged" element={<Tagged />} />
       </Route>

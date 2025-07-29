@@ -4,6 +4,7 @@ import drawerReducer from '../features/drawer/drawerReducer';
 import modalReducer from '../features/modal/modalSlice'
 import authReducer from '../features/auth/authSlice'
 import myInfoReducer from '../features/myInfo/myInfoSlice'
+import postsReducer from '../features/posts/postsSlice'
 
 export const store = configureStore({
   reducer: {
@@ -11,7 +12,8 @@ export const store = configureStore({
     drawer: drawerReducer,
     modal: modalReducer,
     auth: authReducer,
-    myInfo: myInfoReducer
+    myInfo: myInfoReducer,
+    posts: postsReducer
   },
 })
 

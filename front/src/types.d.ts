@@ -33,3 +33,9 @@ interface MyInfoI {
     bio: string;
     gender: string;
 }
+
+interface PostI {
+    userId: number;
+    description: string;
+    id: number;
+}
