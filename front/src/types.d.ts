@@ -38,4 +38,5 @@ interface PostI {
     userId: number;
     description: string;
     id: number;
+    createdAt: string;
 }

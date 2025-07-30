@@ -6,7 +6,7 @@ import Tabs from "../components/profile/Tabs"
 const Profile = () => {
   return (
     <section className='flex flex-col md:flex-row'>
-      <div className="w-full h-[72px] fixed z-30 bottom-0 left-0 right-0 md:relative md:h-screen md:max-w-[244px] max-w-full">
+      <div className="w-full h-[72px] fixed z-30 bottom-0 left-0 right-0 md:relative md:h-screen max-w-[72px] 2xl:max-w-[244px]">
         <Sidebar />
       </div>
       <div className='grow-1'>

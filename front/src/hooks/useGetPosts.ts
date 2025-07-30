@@ -10,7 +10,7 @@ export const useGetPosts = () => {
             return;
         }
         try {
-            const response = await fetch(`${url}/posts/${user?.id}`, {
+            const response = await fetch(`${url}/posts?user_id=${user?.id}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': "application/json"

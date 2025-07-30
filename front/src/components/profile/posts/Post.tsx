@@ -1,30 +1,17 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { url } from '../../../utils/url';
+import { Link } from 'react-router';
+import { useGetPostsImages } from '../../../hooks/useGetPostsImages';
 
 const Post = ({ post }: { post: PostI }) => {
-    const [images, setImages] = useState<any>([]);
-    const [error, setError] = useState('');
-
-    async function getImages() {
-        try {
-            const response = await fetch(`${url}/posts-media/${post.id}`);
-            if (response.ok) {
-                const imagesFromServer = await response.json();
-                setImages(imagesFromServer);
-            }
-        } catch(e: any) {
-            setError(e.message ? e.message : "Помилка при завантаженні картинок");
-        }
-    }
+    const { images, error, getImages } = useGetPostsImages();
 
     useEffect(() => {
-        getImages();
+        getImages(post);
     }, []);
 
-    console.log(images, 'im,agaw')
-
     return (
-        <div className='w-[30%]'>
+        <Link className='w-1/3 max-w-[320px]' to={`/p/${post.id.toString()}`}>
             {error ? (
                 <p className='text-red-500 font-semibold'>
                     {error}
@@ -37,8 +24,7 @@ const Post = ({ post }: { post: PostI }) => {
                     />
                 </div>
             )}
-            {post.description}
-        </div>
+        </Link>
     )
 }
 

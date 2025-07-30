@@ -22,6 +22,7 @@ import GlobalLoader from "./components/common/GlobalLoader";
 import PublicRoute from "./components/common/PubliRoute";
 import { useGetMe } from "./hooks/useGetMe";
 import Posts from "./components/profile/posts/Posts";
+import PostPage from "./pages/PostPage";
 
 
 function App() {
@@ -82,6 +83,8 @@ function App() {
         <Route index element={<Posts />} />
         <Route path="/:nickname/saved" element={<Saved />} />
         <Route path="/:nickname/tagged" element={<Tagged />} />
+      </Route>
+      <Route path="p/:postId" element={<ProtectedRoute><PostPage /></ProtectedRoute>}>
       </Route>
     </Routes>
   )

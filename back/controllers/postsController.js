@@ -52,8 +52,9 @@ async function create(req, res) {
 }
 
 async function getAll(req, res) {
-    const { userId } = req.params;
-    console.log(userId, 'userid')
+    const { user_id } = req.query;
+    const userId = user_id;
+
     try {
         if (!userId) {
             throw ApiError.BadRequest("Неможливо отримати пости, невідомий користувач")
@@ -76,7 +77,33 @@ async function getAll(req, res) {
     }
 }
 
+async function getOne(req, res) {
+    const { postId } = req.params;
+
+    try {
+        if (!postId) {
+            throw ApiError.BadRequest("Неможливо отримати пост, невірний ідентифікатор")
+        }
+
+        const post = await Post.findOne({
+            where: {
+                id: postId
+            }
+        });
+
+        if (!post) {
+            throw ApiError.BadRequest("Неможливо отримати пост, пост не знайдено")
+        } else {
+            const cleanPost = post.dataValues;
+            res.status(200).json(cleanPost);
+        }
+    } catch (e) {
+        res.status(e.status || 500).json({ message: e.message || 'Помилка сервера' });
+    }
+}
+
 export const postsController = {
     create,
-    getAll
+    getAll,
+    getOne
 }

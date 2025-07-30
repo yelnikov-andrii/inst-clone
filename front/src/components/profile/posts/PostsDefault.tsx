@@ -34,7 +34,7 @@ const PostsDefault = () => {
       </p>
       <InlineButton title="Поширте свою першу світлину" onClick={() => dispatch(openModal())} />
       {isOpen && (
-        <Modal maxWidth={700} onClose={onCloseModal}>
+        <Modal styleProps={{ maxWidth: 700 }} onClose={onCloseModal}>
           <CreatePost setAreFilesExist={setAreFilesExist} openDiscard={openDiscard} setOpenDiscard={setOpenDiscard} />
         </Modal>
 
