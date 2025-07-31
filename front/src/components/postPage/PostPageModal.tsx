@@ -35,14 +35,14 @@ const PostPageModal = ({ post }: { post: PostI }) => {
                 setOpen(false);
                 navigate(-1);
             }}
-                styleProps={{ maxWidth: screenWidth ? '60%' : '90%', width: '100%' }}
+                styleProps={{ maxWidth: screenWidth ? '60%' : '90%', width: '100%', maxHeight: '90vh', height: '100%' }}
             >
                 {error && (
                     <div className='text-red-500 font-bold text-3xl'>
                         {error}
                     </div>
                 )}
-                <div className='flex flex-col md:flex-row'>
+                <div className='flex flex-col md:flex-row h-full'>
                     <img src={`${url}/${images[0]?.filename}`} className='object-cover w-full max-h-[335px] md:max-h-none md:w-1/2' />
                     <div className='w-full md:w-1/2 md:py-4 md:px-10 flex flex-col justify-between mt-4 md:mt-0'>
                         <div className='hidden md:block'>

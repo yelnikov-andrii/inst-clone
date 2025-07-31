@@ -40,3 +40,9 @@ interface PostI {
     id: number;
     createdAt: string;
 }
+
+interface LikeInterface {
+    postId: number;
+    userId: number;
+    id: number;
+}

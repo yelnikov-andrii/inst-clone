@@ -1,14 +1,55 @@
 import { CommentIcon, HeartIcon, SavedIcon } from '../icons'
 import DateCreated from '../common/DateCreated';
+import Globalsnackbar from '../common/Globalsnackbar';
+import { useLikePost } from '../../hooks/useLikePost';
+import { useSelector } from 'react-redux';
+import type { RootState } from '../../app/store';
+import { useEffect, useState } from 'react';
+import { useGetLikeStatus } from '../../hooks/useGetLikeStatus';
 
 const ActionsBlock = ({ post }: { post: PostI }) => {
-    const likes = 0;
+    const { likesCount, likeStatus, getLikes, error } = useGetLikeStatus();
+    const { error: errorLike, likePost } = useLikePost();
+    const user = useSelector((state: RootState) => state.auth.user);
+    const [liked, setLiked] = useState(false);
+    const [count, setCount] = useState(0);
+
+    function handleLike() {
+        if (user && post) {
+            likePost(post.id, user.id);
+
+            if (liked) {
+                setCount(prev => prev - 1);
+                setLiked(false);
+            } else {
+                setCount(prev => prev + 1);
+                setLiked(true);
+            }
+        }
+    }
+
+    useEffect(() => {
+        if (user && post) {
+            getLikes(post.id, user.id);
+        }
+    }, [user, post]);
+
+        useEffect(() => {
+        if (likeStatus) {
+            setLiked(true);
+        } else {
+            setLiked(false);
+        }
+
+        setCount(likesCount);
+    }, [likeStatus, likesCount]);
+
     return (
         <div>
             <div className='flex justify-between mb-4'>
                 <div className='flex gap-4 items-center'>
-                    <button>
-                        <HeartIcon active={false} />
+                    <button onClick={handleLike}>
+                        <HeartIcon active={liked} color={liked ? "red" : ""} />
                     </button>
                     <button>
                         <CommentIcon />
@@ -21,9 +62,15 @@ const ActionsBlock = ({ post }: { post: PostI }) => {
                 </div>
             </div>
             <div>
-                {likes > 0 ? (<></>) : (<><p>Станьте першим, хто <button className='text-black font-medium'>вподобає це</button></p></>)}
+                {count > 0 ? (<p className='font-semibold'>{`${count} вподобань`}</p>) : (<><p>Станьте першим, хто <button className='text-black font-medium'>вподобає це</button></p></>)}
             </div>
             <DateCreated post={post} />
+            {error && (
+                <Globalsnackbar text={error} />
+            )}
+            {errorLike && (
+                <Globalsnackbar text={errorLike} />
+            )}
         </div>
     )
 }

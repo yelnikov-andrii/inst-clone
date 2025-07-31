@@ -31,8 +31,6 @@ export const useCreatePost = () => {
             })
         }
 
-        console.log(formData.entries())
-
         try {
             const response = await fetch(`${url}/posts`, {
                 method: "POST",

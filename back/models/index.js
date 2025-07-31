@@ -93,3 +93,19 @@ Post.hasMany(PostMedia, { foreignKey: "postId"});
 PostMedia.belongsTo(Post, { foreignKey: 'postId'});
 
 PostMedia.sync();
+
+export const Like = sequelize.define('insta_like', {
+    id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
+    }
+});
+
+Post.hasMany(Like, {foreignKey: 'postId'});
+Like.belongsTo(Post, {foreignKey: 'postId'});
+
+User.hasMany(Like, {foreignKey: 'userId'});
+Like.belongsTo(User, {foreignKey: 'userId'});
+
+Like.sync();
