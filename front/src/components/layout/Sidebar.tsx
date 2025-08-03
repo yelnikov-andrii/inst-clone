@@ -11,7 +11,7 @@ import type { RootState } from '../../app/store'
 import SearchSIdeBlock from './SearchSIdeBlock'
 import NotificationsSideBlock from './NotificationsSideBlock'
 import clsx from 'clsx'
-import { useLogout } from '../../hooks/useLogOut'
+import { useLogout } from '../../hooks/auth/useLogOut'
 import Avatar from '../common/Avatar'
 import { url } from '../../utils/url'
 

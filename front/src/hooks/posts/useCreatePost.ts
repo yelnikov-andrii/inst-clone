@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { useSelector } from "react-redux";
-import type { RootState } from "../app/store";
-import { url } from "../utils/url";
+import type { RootState } from "../../app/store";
+import { url } from "../../utils/url";
 
 export const useCreatePost = () => {
     const [loading, setLoading] = useState(false);

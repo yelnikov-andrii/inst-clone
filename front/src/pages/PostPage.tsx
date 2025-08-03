@@ -2,7 +2,7 @@ import { useParams } from 'react-router';
 import PostPageDefault from '../components/postPage/PostPageDefault';
 import PostPageModal from '../components/postPage/PostPageModal';
 import { useResize } from '../hooks/useResize'
-import { useGetPost } from '../hooks/useGetPost';
+import { useGetPost } from '../hooks/posts/useGetPost';
 import { useEffect } from 'react';
 import GlobalLoader from '../components/common/GlobalLoader';
 

@@ -8,7 +8,7 @@ import TextBoxBlock from './TextBoxBlock';
 import clsx from 'clsx';
 import { useDragFiles } from '../../../hooks/useDragFiles';
 import Topbar from './Topbar';
-import { useCreatePost } from '../../../hooks/useCreatePost';
+import { useCreatePost } from '../../../hooks/posts/useCreatePost';
 import CreatingPostLoader from './CreatingPostLoader';
 
 interface PostStateI {

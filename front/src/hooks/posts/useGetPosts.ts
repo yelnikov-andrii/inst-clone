@@ -1,6 +1,6 @@
 import { useDispatch } from "react-redux"
-import { url } from "../utils/url";
-import { getPosts } from "../features/posts/postsSlice";
+import { url } from "../../utils/url";
+import { getPosts } from "../../features/posts/postsSlice";
 
 export const useGetPosts = () => {
     const dispatch = useDispatch();

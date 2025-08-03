@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { url } from "../utils/url";
+import { url } from "../../utils/url";
 
 export const useGetPostsImages = () => {
     const [images, setImages] = useState<any>([]);

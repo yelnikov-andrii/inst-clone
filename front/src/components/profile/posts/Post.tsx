@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { url } from '../../../utils/url';
 import { Link } from 'react-router';
-import { useGetPostsImages } from '../../../hooks/useGetPostsImages';
+import { useGetPostsImages } from '../../../hooks/posts/useGetPostsImages';
 
 const Post = ({ post }: { post: PostI }) => {
     const { images, error, getImages } = useGetPostsImages();

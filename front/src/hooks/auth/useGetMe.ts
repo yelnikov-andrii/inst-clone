@@ -1,6 +1,6 @@
 import { useDispatch } from "react-redux";
-import { url } from "../utils/url";
-import { getMyInfo } from "../features/myInfo/myInfoSlice";
+import { url } from "../../utils/url";
+import { getMyInfo } from "../../features/myInfo/myInfoSlice";
 
 export const useGetMe = () => {
     const dispatch = useDispatch();

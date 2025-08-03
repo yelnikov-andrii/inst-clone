@@ -1,6 +1,6 @@
 import { useDispatch } from "react-redux";
-import { url } from "../utils/url"
-import { logOut } from "../features/auth/authSlice";
+import { url } from "../../utils/url"
+import { logOut } from "../../features/auth/authSlice";
 import { useNavigate } from "react-router";
 
 export const useLogout = () => {

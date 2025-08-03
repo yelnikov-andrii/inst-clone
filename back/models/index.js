@@ -109,3 +109,18 @@ User.hasMany(Like, {foreignKey: 'userId'});
 Like.belongsTo(User, {foreignKey: 'userId'});
 
 Like.sync();
+
+export const Comment = sequelize.define("comment_inst", {
+    text: {
+        type: DataTypes.TEXT,
+        allowNull: false
+    }
+});
+
+Post.hasMany(Comment, {foreignKey: 'postId'});
+Comment.belongsTo(Post, {foreignKey: 'postId'});
+
+User.hasMany(Comment, {foreignKey: 'userId'});
+Comment.belongsTo(User, {foreignKey: 'userId'});
+
+Comment.sync();

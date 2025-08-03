@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useGetPosts } from '../../../hooks/useGetPosts';
+import { useGetPosts } from '../../../hooks/posts/useGetPosts';
 import PostsDefault from './PostsDefault';
 import { useSelector } from 'react-redux';
 import type { RootState } from '../../../app/store';

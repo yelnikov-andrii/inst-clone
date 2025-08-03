@@ -4,6 +4,7 @@ import { userInfoRouter } from './userInfoRouter.js';
 import { postsRouter } from './postsRouter.js';
 import { mediaRouter } from './mediaRouter.js';
 import { likesRouter } from './likesRouter.js';
+import { commentsRouter } from './CommentsRouter.js';
 
 export const router = express.Router();
 
@@ -12,3 +13,4 @@ router.use(userInfoRouter);
 router.use(postsRouter);
 router.use(mediaRouter);
 router.use(likesRouter);
+router.use(commentsRouter);

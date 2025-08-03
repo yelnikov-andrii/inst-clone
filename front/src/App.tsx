@@ -3,7 +3,7 @@ import type { RootState } from "./app/store";
 import { useEffect } from "react";
 import { logIn, setAuthLoaded } from "./features/auth/authSlice";
 import GlobalLoader from "./components/common/GlobalLoader";
-import { useGetMe } from "./hooks/useGetMe";
+import { useGetMe } from "./hooks/auth/useGetMe";
 import AppRoutes from "./appRoutes/AppRoutes";
 
 

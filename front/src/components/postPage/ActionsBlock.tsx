@@ -1,13 +1,13 @@
 import { CommentIcon, HeartIcon, SavedIcon } from '../icons'
 import DateCreated from '../common/DateCreated';
 import Globalsnackbar from '../common/Globalsnackbar';
-import { useLikePost } from '../../hooks/useLikePost';
+import { useLikePost } from '../../hooks/likes/useLikePost';
 import { useSelector } from 'react-redux';
 import type { RootState } from '../../app/store';
 import { useEffect, useState } from 'react';
-import { useGetLikeStatus } from '../../hooks/useGetLikeStatus';
+import { useGetLikeStatus } from '../../hooks/likes/useGetLikeStatus';
 
-const ActionsBlock = ({ post }: { post: PostI }) => {
+const ActionsBlock = ({ post, handleFocusInput }: { post: PostI, handleFocusInput: () => void }) => {
     const { likesCount, likeStatus, getLikes, error } = useGetLikeStatus();
     const { error: errorLike, likePost } = useLikePost();
     const user = useSelector((state: RootState) => state.auth.user);
@@ -34,7 +34,7 @@ const ActionsBlock = ({ post }: { post: PostI }) => {
         }
     }, [user, post]);
 
-        useEffect(() => {
+    useEffect(() => {
         if (likeStatus) {
             setLiked(true);
         } else {
@@ -51,7 +51,7 @@ const ActionsBlock = ({ post }: { post: PostI }) => {
                     <button onClick={handleLike}>
                         <HeartIcon active={liked} color={liked ? "red" : ""} />
                     </button>
-                    <button>
+                    <button onClick={handleFocusInput}>
                         <CommentIcon />
                     </button>
                 </div>

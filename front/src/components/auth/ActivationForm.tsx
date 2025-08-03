@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import AuthInput from '../ui/AuthInput'
-import { useAuth } from '../../hooks/useAuth';
+import { useAuth } from '../../hooks/auth/useAuth';
 import { url } from '../../utils/url';
 import SubmitButtonBlock from './SubmitButtonBlock';
 import ErrorBlock from './ErrorBlock';

@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
-import { saveData } from "../utils/saveData";
-import { logIn } from "../features/auth/authSlice";
+import { saveData } from "../../utils/saveData";
+import { logIn } from "../../features/auth/authSlice";
 
 export const useAuth = () => {
     const [error, setError] = useState('');

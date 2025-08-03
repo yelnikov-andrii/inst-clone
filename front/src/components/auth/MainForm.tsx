@@ -4,7 +4,7 @@ import AuthSeparator from '../ui/AuthSeparator';
 import AuthBorderlessButton from '../ui/AuthBorderlessButton';
 import { handleInputChange } from '../../utils/handleInputChange';
 import { LogoIcon } from '../icons';
-import { useAuth } from '../../hooks/useAuth';
+import { useAuth } from '../../hooks/auth/useAuth';
 import { url } from '../../utils/url';
 import SubmitButtonBlock from './SubmitButtonBlock';
 import ErrorBlock from './ErrorBlock';
