@@ -75,7 +75,15 @@ const Edit = () => {
         setUserData(prev => ({ ...prev, [name]: target.value }));
     }
 
-    const avatarUrl = !userData.avatar.includes('http') ? `${url}/${userData.avatar}` : userData.avatar;
+    let avatarUrl = '';
+
+    if (userData.avatar) {
+        if (!userData.avatar.includes('http')) {
+            avatarUrl = `${url}/${userData.avatar}`;
+        } else {
+            avatarUrl = userData.avatar;
+        }
+    }
 
     return (
         <div className='w-full py-10 px-12'>

@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Modal = ({ children, onClose, styleProps }: { children: React.ReactNode, onClose: any, styleProps: any }) => {
+const Modal = ({ children, onClose, styleProps }: { children: React.ReactNode, onClose: () => void, styleProps?: React.CSSProperties }) => {
 
   return (
     <div className="fixed top-0 bottom-0 left-0 right-0 bg-gray-500/50 z-50 center"

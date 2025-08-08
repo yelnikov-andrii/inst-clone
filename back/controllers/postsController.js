@@ -1,11 +1,10 @@
-import { Post, PostMedia } from "../models/index.js";
+import { Post, PostMedia, User, UserInfo } from "../models/index.js";
 import { ApiError } from "../utils/ApiError.js";
 import path from 'path';
 
 async function create(req, res) {
     const { description, userId } = req.body;
     const files = req.files.files;
-    console.log(files, 'files')
 
     try {
         if (!userId) {
@@ -63,7 +62,11 @@ async function getAll(req, res) {
         const posts = await Post.findAll({
             where: {
                 userId
-            }
+            },
+            include: [{
+                model: PostMedia,
+                attributes: ["id", "filename", "type"]
+            }]
         });
 
         if (!posts || !posts.length) {
@@ -88,7 +91,21 @@ async function getOne(req, res) {
         const post = await Post.findOne({
             where: {
                 id: postId
-            }
+            },
+            include: [
+                {
+                    model: PostMedia,
+                    attributes: ["id", "filename", "type"]
+                },
+                {
+                    model: User,
+                    attributes: ["id", "nickname"],
+                    include: [{
+                        model: UserInfo,
+                        attributes: ["avatar", "id"]
+                    }]
+                }
+            ]
         });
 
         if (!post) {
@@ -102,8 +119,69 @@ async function getOne(req, res) {
     }
 }
 
+async function deletePost(req, res) {
+    const { postId, userId } = req.body;
+
+    try {
+        if (!postId || !userId) {
+            throw ApiError.BadRequest("Не можна видалити пост");
+        }
+
+        const foundPost = await Post.findOne({
+            where: {
+                id: postId,
+                userId
+            }
+        });
+
+        if (!foundPost) {
+            throw ApiError.BadRequest("Поста не існує")
+        }
+
+        foundPost.destroy();
+        res.status(200).json({ message: "Пост видалено" })
+    } catch (e) {
+        res.status(e.status || 500).json({ message: e.message || 'Помилка сервера' });
+    }
+}
+
+async function updatePost(req, res) {
+    const { description, id } = req.body;
+
+    try {
+
+        if (!description || !id) {
+            throw ApiError.BadRequest("Неможливо редагувати пост");
+        }
+
+        const foundPost = await Post.findOne({ where: { id } });
+
+        if (!foundPost) {
+            throw ApiError.BadRequest("Неможливо редагувати, пост не знайдено");
+        } else {
+            const [affectedCount] = await Post.update({ description }, {
+                where: {
+                    id
+                }
+            });
+
+            if (affectedCount === 0) {
+                throw ApiError.BadRequest("Неможливо редагувати пост, можливо його не існує");
+            } else {
+                const foundPost = await Post.findOne({ where: { id } });
+                const post = foundPost.dataValues;
+                res.status(200).json(post)
+            }
+        }
+    } catch (e) {
+        res.status(e.status || 500).json({ message: e.message || 'Помилка сервера' });
+    }
+}
+
 export const postsController = {
     create,
     getAll,
-    getOne
+    getOne,
+    deletePost,
+    updatePost
 }

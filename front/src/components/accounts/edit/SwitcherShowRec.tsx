@@ -1,5 +1,5 @@
 
-const SwitcherShowRec = ({ value, onChange }: { value: boolean, onChange: any }) => {
+const SwitcherShowRec = ({ value, onChange }: { value: boolean, onChange: React.ChangeEventHandler<HTMLInputElement> }) => {
     return (
         <label className='relative cursor-pointer w-10'>
             <input type='checkbox' className='sr-only peer' checked={value} onChange={onChange} name='showRecommendations' />

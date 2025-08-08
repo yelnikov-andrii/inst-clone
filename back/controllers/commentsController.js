@@ -1,4 +1,4 @@
-import { Post, Comment, User } from "../models/index.js";
+import { Post, Comment, User, UserInfo } from "../models/index.js";
 
 async function create(req, res) {
     const { postId, userId, text } = req.body;
@@ -45,10 +45,13 @@ async function getPostComments(req, res) {
             where: {
                 postId,
             },
-            raw: true,
             include: {
                 model: User,
-                attributes: ["id", "nickname", "fullname"]
+                attributes: ["id", "nickname", "fullname"],
+                include: [{
+                    model: UserInfo,
+                    attributes: ["id", "avatar"]
+                }]
             }
         });
 

@@ -4,13 +4,10 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import { Navigation } from 'swiper/modules';
 import { useRef, useState } from 'react';
+import { url } from '../../utils/url';
 
-interface PostI {
-    images: string[];
-}
-
-const PostMedia = ({ post }: { post: PostI }) => {
-    const postImagesCount = post.images.length;
+const PostMedia = ({ media }: { media: PostMediaI[] }) => {
+    const postImagesCount = media.length;
     const [currentPage, setCurrentPage] = useState(1);
 
     const prevRef = useRef<HTMLButtonElement | null>(null);
@@ -34,10 +31,10 @@ const PostMedia = ({ post }: { post: PostI }) => {
                 }}
                 onSlideChange={(swiper) => { setCurrentPage(swiper.realIndex + 1) }}
             >
-                {post.images?.map(imageSrc => (
+                {media?.map(medaiItem => (
                     <SwiperSlide className='h-full'>
                         <img
-                            src={imageSrc}
+                            src={`${url}/${medaiItem.filename}`}
                             alt='iamge alt'
                             className='w-full h-full object-cover object-center'
                         />

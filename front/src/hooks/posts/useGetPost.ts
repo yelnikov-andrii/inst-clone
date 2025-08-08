@@ -2,7 +2,7 @@ import { useState } from "react";
 import { url } from "../../utils/url";
 
 export const useGetPost = () => {
-    const [post, setPost] = useState();
+    const [post, setPost] = useState<PostI>();
     const [loading, setLoading] = useState(false);
 
     async function getPost(postId: number) {

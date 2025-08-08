@@ -1,23 +1,23 @@
 import React, { useEffect, useRef, useState, type Dispatch, type SetStateAction } from 'react'
 import { MediaFilesIcon } from '../../icons'
 import PrimaryButton from '../../ui/PrimaryButton'
-import MediaSwiper from './MediaSwiper';
 import Modal from '../../ui/Modal';
 import DiscardBlock from './DiscardBlock';
-import TextBoxBlock from './TextBoxBlock';
-import clsx from 'clsx';
 import { useDragFiles } from '../../../hooks/useDragFiles';
 import Topbar from './Topbar';
 import { useCreatePost } from '../../../hooks/posts/useCreatePost';
 import CreatingPostLoader from './CreatingPostLoader';
+import CreatePostInfo from './CreatePostInfo';
+import { useUpdatePost } from '../../../hooks/posts/useUpdatePost';
 
 interface PostStateI {
     files: File[];
     description: string;
     textBoxIsOpen: boolean;
+    id?: number;
 }
 
-const CreatePost = ({ setAreFilesExist, openDiscard, setOpenDiscard }: { setAreFilesExist: Dispatch<SetStateAction<boolean>>, openDiscard: boolean, setOpenDiscard: Dispatch<SetStateAction<boolean>> }) => {
+const CreatePost = ({ setAreFilesExist, openDiscard, setOpenDiscard, postToUpdate }: { setAreFilesExist: Dispatch<SetStateAction<boolean>>, openDiscard: boolean, setOpenDiscard: Dispatch<SetStateAction<boolean>>, postToUpdate?: PostI }) => {
 
     const fileInputRef = useRef<HTMLInputElement | null>(null);
     const [discardModalIsOpen, setDiscardModalIsOpen] = useState(false);
@@ -31,6 +31,7 @@ const CreatePost = ({ setAreFilesExist, openDiscard, setOpenDiscard }: { setAreF
     const { isDragActive, handleDragLeave, handleDragOver, handleDrop } = useDragFiles(setPost);
 
     const { createPost, loading, error, success } = useCreatePost();
+    const { updatePost, updateLoading, updateError, updateSuccess } = useUpdatePost();
 
     function handleselectFile() {
         if (fileInputRef.current) {
@@ -61,10 +62,6 @@ const CreatePost = ({ setAreFilesExist, openDiscard, setOpenDiscard }: { setAreF
         closeDiscardModal();
     }
 
-    function handleChangeDescription(e: React.ChangeEvent<HTMLTextAreaElement>) {
-        setPost(post => ({ ...post, description: e.target.value }));
-    }
-
     useEffect(() => {
         if (post.files.length > 0) {
             setAreFilesExist(true);
@@ -80,31 +77,37 @@ const CreatePost = ({ setAreFilesExist, openDiscard, setOpenDiscard }: { setAreF
 
     }, [openDiscard])
 
-    if (loading) {
+    useEffect(() => {
+        if (postToUpdate) {
+            setPost(prev => ({ ...prev, textBoxIsOpen: true, description: postToUpdate.description, id: postToUpdate.id }))
+        }
+    }, [postToUpdate]);
+
+    if (loading || updateLoading) {
         return (
             <CreatingPostLoader
-              type="loading"
-              text="Поширення"
+                type="loading"
+                text={loading ? "Поширення" : "Редагування"}
             />
         )
     }
 
-    if (error) {
+    if (error || updateError) {
         setAreFilesExist(false);
         return (
             <CreatingPostLoader
-              type="error"
-              text={error}
+                type="error"
+                text={error || updateError}
             />
         )
     }
 
-    if (success) {
+    if (success || updateSuccess) {
         setAreFilesExist(false);
         return (
             <CreatingPostLoader
-              type="success"
-              text={success}
+                type="success"
+                text={success || updateSuccess}
             />
         )
     }
@@ -116,34 +119,31 @@ const CreatePost = ({ setAreFilesExist, openDiscard, setOpenDiscard }: { setAreF
             onDrop={handleDrop}
             onDragLeave={handleDragLeave}
         >
-            {post.files?.length > 0 ? (
-                <Topbar 
-                  textBoxIsOpen={post.textBoxIsOpen}
-                  back={handleDiscardModalOpen}
-                  next={() => setPost(post => ({ ...post, textBoxIsOpen: true }))}
-                  submit={() => { createPost(post)}}
+            {(post.files.length > 0 || postToUpdate) ? (
+                <Topbar
+                    textBoxIsOpen={post.textBoxIsOpen}
+                    back={handleDiscardModalOpen}
+                    next={() => setPost(post => ({ ...post, textBoxIsOpen: true }))}
+                    submit={() => {
+                        if (!postToUpdate) {
+                            createPost(post)
+                        } else {
+                            updatePost(post);
+                        }
+                    }}
+                    postToUpdate={postToUpdate}
                 />
             ) : (
                 <p className='font-semibold mb-15 pb-4 border-b border-b-ig-separator text-center'>
                     Створити допис
                 </p>
             )}
-            {post.files.length > 0 ? (
-                <div className={clsx('w-full', {
-                    'flex gap-4': post.textBoxIsOpen,
-                })}>
-                    <div className={clsx('', {
-                        'w-full': !post.textBoxIsOpen,
-                        'w-full max-w-[60%]': post.textBoxIsOpen
-                    })}>
-                        <MediaSwiper files={post.files} />
-                    </div>
-                    {post.textBoxIsOpen && (
-                        <div className='w-80'>
-                            <TextBoxBlock value={post.description} onChange={handleChangeDescription} />
-                        </div>
-                    )}
-                </div>
+            {(post.files.length > 0 || postToUpdate) ? (
+                <CreatePostInfo
+                    post={post}
+                    setPost={setPost}
+                    postToUpdate={postToUpdate}
+                />
             ) : (
                 <>
                     <MediaFilesIcon active={isDragActive} />
@@ -155,7 +155,7 @@ const CreatePost = ({ setAreFilesExist, openDiscard, setOpenDiscard }: { setAreF
                 </>
             )}
             {discardModalIsOpen && (
-                <Modal onClose={closeDiscardModal}>
+                <Modal onClose={closeDiscardModal} styleProps={{ width: '40%'}}>
                     <DiscardBlock discard={handleDiscardChanges} notDiscard={closeDiscardModal} />
                 </Modal>
             )}

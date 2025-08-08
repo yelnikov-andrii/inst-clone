@@ -1,13 +1,17 @@
 import { useState } from "react"
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "../../app/store";
 import { url } from "../../utils/url";
+import { useNavigate } from "react-router";
+import { closeModal } from "../../features/modal/modalSlice";
 
 export const useCreatePost = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
     const user = useSelector((state: RootState) => state.auth.user);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     async function createPost(post: { description: string; files: File[] }) {
         setError("");
@@ -44,11 +48,21 @@ export const useCreatePost = () => {
                 setSuccess("Пост створено");
             }
 
-        } catch (e: any) {
-            setError(e.message || "Помилка при відправці даних");
+        } catch (e: unknown) {
+            if (e instanceof Error) {
+                setError(e.message);
+            } else {
+                setError("Помилка невідома");
+            }
         }
         finally {
             setLoading(false);
+            setTimeout(() => {
+                if (!error) {
+                    dispatch(closeModal());
+                    navigate(0);
+                }
+            }, (1000));
         }
     }
 

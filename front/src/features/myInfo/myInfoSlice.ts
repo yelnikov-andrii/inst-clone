@@ -15,10 +15,13 @@ export const myInfoSlice = createSlice({
   reducers: {
     getMyInfo: (state, action: PayloadAction<MyInfoI>) => {
         state.myInfo = action.payload;
+    },
+    clearMyInfo: (state) => {
+      state.myInfo = null;
     }
   },
 })
 
-export const { getMyInfo } = myInfoSlice.actions
+export const { getMyInfo, clearMyInfo } = myInfoSlice.actions
 
 export default myInfoSlice.reducer

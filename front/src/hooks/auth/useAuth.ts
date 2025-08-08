@@ -10,7 +10,7 @@ export const useAuth = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    async function auth(endpoint: string, body: any) {
+    async function auth(endpoint: string, body: { code: string; nickname: string }) {
         try {
             setLoading(true);
             const response = await fetch(endpoint, {
@@ -32,8 +32,13 @@ export const useAuth = () => {
                 navigate('/')
             }
 
-        } catch (e: any) {
-            setError(e.message);
+        } catch (e: unknown) {
+            if (e instanceof Error) {
+                setError(e.message);
+            } else {
+                setError("Помилка авторизації");
+            }
+
         } finally {
             setLoading(false);
         }

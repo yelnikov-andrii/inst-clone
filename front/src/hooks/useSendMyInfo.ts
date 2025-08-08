@@ -2,6 +2,7 @@ import { useState } from "react";
 import { url } from "../utils/url";
 import { useSelector } from "react-redux";
 import type { RootState } from "../app/store";
+import { useGetMe } from "./auth/useGetMe";
 
 export const useSendMyInfo = () => {
     const myInfo = useSelector((state: RootState) => state.myInfo.myInfo);
@@ -10,6 +11,8 @@ export const useSendMyInfo = () => {
         error: ''
     });
     const [snackbarMessage, setSnackbarMessage] = useState('');
+
+    const { getUserInfo } = useGetMe();
 
     async function sendUserInfo(file: File | null, user: UserI | null, userData: MyInfoI) {
         const formData = new FormData();
@@ -40,12 +43,21 @@ export const useSendMyInfo = () => {
             } else {
                 setSnackbarMessage("Профіль оновлено");
             }
-        } catch (e: any) {
-            setFetchingData(prev => ({ ...prev, error: e.message || "Помилка при відправці даних" }))
+        } catch (e: unknown) {
+            if (e instanceof Error) {
+                setFetchingData(prev => ({ ...prev, error: e.message }))
+            } else {
+                setFetchingData(prev => ({ ...prev, error: "Помилка при відправці даних" }))
+            }
+
         } finally {
             setFetchingData(prev => ({ ...prev, loading: false }));
             setTimeout(() => {
                 setSnackbarMessage("");
+                if (user) {
+                    getUserInfo(user.id);
+                }
+
             }, 3500)
         }
     }

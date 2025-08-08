@@ -2,8 +2,9 @@ import Avatar from '../../common/Avatar'
 import { useSelector } from 'react-redux';
 import type { RootState } from '../../../app/store';
 import { url } from '../../../utils/url';
+import type React from 'react';
 
-const TextBoxBlock = ({ value, onChange }: { value: string, onChange: any }) => {
+const TextBoxBlock = ({ value, onChange }: { value: string, onChange: React.ChangeEventHandler<HTMLTextAreaElement> }) => {
     const myInfo = useSelector((state: RootState) => state.myInfo.myInfo);
     const user = useSelector((state: RootState) => state.auth.user);
     const maxLength = 2200;

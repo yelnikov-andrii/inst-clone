@@ -34,8 +34,13 @@ export const useCreateComment = () => {
                 setText("");
             }
 
-        } catch (e: any) {
-            setError(e.message || "Помилка невідома");
+        } catch (e: unknown) {
+            if (e instanceof Error) {
+                setError(e.message);
+            } else {
+                setError("Помилка невідома");
+            }
+
         }
         finally {
             setLoading(false);

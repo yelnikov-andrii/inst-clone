@@ -1,20 +1,10 @@
-import Sidebar from '../layout/Sidebar'
-import { useEffect } from 'react'
-import { useGetPostsImages } from '../../hooks/posts/useGetPostsImages';
+import Sidebar from '../layout/Sidebar';
 import { LeftArrow } from '../icons';
 import { useNavigate } from 'react-router';
 import PostPageInfo from './PostPageInfo';
 
 const PostPageDefault = ({ post }: { post: PostI }) => {
-  const { images, error, getImages } = useGetPostsImages();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    if (post) {
-      getImages(post);
-    }
-
-  }, [post]);
 
   function back() {
     navigate(-1);
@@ -27,11 +17,6 @@ const PostPageDefault = ({ post }: { post: PostI }) => {
       </div>
       <div className='grow-1'>
         <main className='py-6 px-3'>
-          {error && (
-            <div className='text-red-500 font-bold text-3xl'>
-              {error}
-            </div>
-          )}
           <div className='pb-4 border-b border-b-ig-secondary-text flex justify-between items-center font-medium'>
             <button onClick={back}>
               <LeftArrow />
@@ -42,8 +27,7 @@ const PostPageDefault = ({ post }: { post: PostI }) => {
             <div></div>
           </div>
           <div className='flex flex-col md:flex-row'>
-            <PostPageInfo 
-              images={images}
+            <PostPageInfo
               post={post}
             />
           </div>

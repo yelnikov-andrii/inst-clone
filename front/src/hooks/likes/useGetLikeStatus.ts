@@ -22,12 +22,15 @@ export const useGetLikeStatus = () => {
             });
 
             const res = await response.json();
-            console.log(res)
             setLikesCount(res.count);
             setLikeStatus(res.liked);
 
-        } catch (e: any) {
-            setError(e.message || "Помилка сервера");
+        } catch (e: unknown) {
+            if (e instanceof Error) {
+                setError(e.message);
+            } else {
+                setError("Помилка невідома");
+            }
         } finally {
             setTimeout(() => {
                 setError('');
@@ -35,5 +38,5 @@ export const useGetLikeStatus = () => {
         }
     }
 
-    return { likesCount, likeStatus, error, getLikes};
+    return { likesCount, likeStatus, error, getLikes };
 }

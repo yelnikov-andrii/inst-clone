@@ -5,6 +5,7 @@ import modalReducer from '../features/modal/modalSlice'
 import authReducer from '../features/auth/authSlice'
 import myInfoReducer from '../features/myInfo/myInfoSlice'
 import postsReducer from '../features/posts/postsSlice'
+import feedReducer from '../features/feed/feedSlice';
 
 export const store = configureStore({
   reducer: {
@@ -13,7 +14,8 @@ export const store = configureStore({
     modal: modalReducer,
     auth: authReducer,
     myInfo: myInfoReducer,
-    posts: postsReducer
+    posts: postsReducer,
+    feed: feedReducer,
   },
 })
 

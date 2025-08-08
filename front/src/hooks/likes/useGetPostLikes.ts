@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { url } from "../utils/url";
+import { url } from "../../utils/url";
 
 export const useGetPostLikes = (postId: number) => {
     const [likes, setLikes] = useState<LikeInterface[]>([]);
@@ -22,11 +22,14 @@ export const useGetPostLikes = (postId: number) => {
             });
 
             const likesFromServer = await response.json();
-            console.log(likesFromServer)
             setLikes(likesFromServer);
 
-        } catch (e: any) {
-            setError(e.message || "Помилка сервера");
+        } catch (e: unknown) {
+            if (e instanceof Error) {
+                setError(e.message);
+            } else {
+                setError("Помилка невідома");
+            }
         } finally {
             setLoading(false);
             setTimeout(() => {

@@ -1,5 +1,6 @@
+import type React from "react";
 
-const BioTextArea = ({ value, onChange }: { value: string, onChange: any }) => {
+const BioTextArea = ({ value, onChange }: { value: string, onChange: React.ChangeEventHandler<HTMLTextAreaElement> }) => {
     const maxLength = 150;
     return (
         <div>

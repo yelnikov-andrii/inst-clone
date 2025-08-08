@@ -2,7 +2,7 @@ import { useState } from "react";
 import { url } from "../../utils/url";
 
 export const useGetPostsImages = () => {
-    const [images, setImages] = useState<any>([]);
+    const [images, setImages] = useState<{ type: string; image: string}[]>([]);
     const [error, setError] = useState('');
 
     async function getImages(post: PostI) {
@@ -12,8 +12,12 @@ export const useGetPostsImages = () => {
                 const imagesFromServer = await response.json();
                 setImages(imagesFromServer);
             }
-        } catch (e: any) {
-            setError(e.message ? e.message : "Помилка при завантаженні картинок");
+        } catch (e: unknown) {
+            if (e instanceof Error) {
+                setError(e.message);
+            } else {
+                setError("Помилка невідома");
+            }
         }
     }
 

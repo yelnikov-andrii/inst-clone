@@ -14,10 +14,7 @@ const Posts = () => {
     if (user) {
       getAllPosts(user);
     }
-
   }, [user]);
-
-  console.log(posts, 'posts form store')
 
   return (
     <div className='pt-10 pb-6'>

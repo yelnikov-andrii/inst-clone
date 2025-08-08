@@ -1,4 +1,3 @@
-import { where } from "sequelize";
 import { UserInfo } from "../models/index.js";
 import { ApiError } from "../utils/ApiError.js";
 import path from 'path';
@@ -10,8 +9,10 @@ async function create(req, res) {
 
     try {
 
+        let uploadPath = '';
+
         if (avatar) {
-            const uploadPath = path.join('uploads', avatar.name);
+            uploadPath = path.join('uploads', avatar.name);
             await avatar.mv(uploadPath);
         }
 
@@ -71,7 +72,7 @@ async function update(req, res) {
             userInfo.showRecommendations = showRecommendations === 'true';
         }
 
-        const response = await UserInfo.update(userInfo, {where:  {
+        const response = await UserInfo.update(userInfo, { where:  {
             userId
         }});
 

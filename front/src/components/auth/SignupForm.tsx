@@ -52,8 +52,12 @@ const SignupForm = () => {
                 navigate(`/accounts/activation?nickname=${data.nickname}`);
             }
 
-        } catch (e: any) {
-            setErrorMessage(e.message);
+        } catch (e: unknown) {
+            if (e instanceof Error) {
+                setErrorMessage(e.message);
+            } else {
+                setErrorMessage("Невідома помилка");
+            }
         } finally {
             setLoading(false);
         }

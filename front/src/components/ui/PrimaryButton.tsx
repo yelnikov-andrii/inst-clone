@@ -1,6 +1,6 @@
 import clsx from 'clsx'
 
-const PrimaryButton = ({ mini, title, height, width, onClick = () => { } }: { mini?: boolean, title: React.ReactNode, height?: number, width?: number, onClick?: any }) => {
+const PrimaryButton = ({ mini, title, height, width, onClick = () => { } }: { mini?: boolean, title: React.ReactNode, height?: number, width?: number, onClick?: () => void }) => {
     const style = {
         width: width ? `${width}px` : 'inherit',
         height: height ? `${height}px` : '32px'

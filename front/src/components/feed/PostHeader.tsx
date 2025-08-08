@@ -1,22 +1,38 @@
 import UserIcon from '../../images/user-icon.jpg'
+import { url } from '../../utils/url';
+import Avatar from '../common/Avatar';
+import DateCreated from '../common/DateCreated';
+import { ButtonDots } from '../icons';
 
-const PostHeader = () => {
+const PostHeader = ({ feedItem }: { feedItem: FeedItemI }) => {
+    let avatarUrl = '';
+
+    if (feedItem?.Insta_User?.insta_user_info?.avatar) {
+        if (!feedItem.Insta_User?.insta_user_info.avatar.includes('http')) {
+            avatarUrl = `${url}/${feedItem.Insta_User?.insta_user_info.avatar}`;
+        } else {
+            avatarUrl = feedItem.Insta_User?.insta_user_info.avatar;
+        }
+    }
+
     return (
         <div className='flex justify-between items-center w-full mb-5'>
             <div className='flex gap-2 items-center'>
-                <img src={UserIcon} alt="Користувач" className='w-[32px] h-[32px]' />
+                <Avatar width={32} height={32} src={avatarUrl ? avatarUrl : UserIcon} />
                 <span className='font-semibold text-black'>
-                    user_nickname
+                    {feedItem.Insta_User.nickname}
                 </span>
                 <span className='text-ig-secondary-text'>
                     •
                 </span>
                 <span className='text-ig-secondary-text'>
-                    1 тиж.
+                    <DateCreated 
+                      createdAt={feedItem.createdAt}
+                    />
                 </span>
             </div>
             <button>
-                <svg aria-label="Більше" fill="currentColor" height="24" role="img" viewBox="0 0 24 24" width="24"><title>Більше</title><circle cx="12" cy="12" r="1.5"></circle><circle cx="6" cy="12" r="1.5"></circle><circle cx="18" cy="12" r="1.5"></circle></svg>
+                <ButtonDots />
             </button>
         </div>
     )

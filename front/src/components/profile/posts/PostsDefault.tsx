@@ -2,26 +2,13 @@ import { useDispatch, useSelector } from "react-redux"
 import { CameraIcon } from "../../icons"
 import InlineButton from "../../ui/InlineButton"
 import type { RootState } from "../../../app/store"
-import { closeModal, openModal } from "../../../features/modal/modalSlice"
-import CreatePost from "./CreatePost"
-import Modal from "../../ui/Modal"
-import { useState } from "react"
+import { openModal } from "../../../features/modal/modalSlice"
+import CreatePostModal from "../../common/CreatePostModal"
 
 const PostsDefault = () => {
   const isOpen = useSelector((state: RootState) => state.modal.isOpen);
   const dispatch = useDispatch();
-  const [areFilesExist, setAreFilesExist] = useState(false);
-  const [openDiscard, setOpenDiscard] = useState(false);
 
-
-  function onCloseModal() {
-    if (areFilesExist) {
-      setOpenDiscard(true);
-    } else {
-      dispatch(closeModal());
-      setOpenDiscard(false);
-    }
-  }
 
   return (
     <div className='flex justify-center items-center flex-col mt-10'>
@@ -34,10 +21,7 @@ const PostsDefault = () => {
       </p>
       <InlineButton title="Поширте свою першу світлину" onClick={() => dispatch(openModal())} />
       {isOpen && (
-        <Modal styleProps={{ maxWidth: 700 }} onClose={onCloseModal}>
-          <CreatePost setAreFilesExist={setAreFilesExist} openDiscard={openDiscard} setOpenDiscard={setOpenDiscard} />
-        </Modal>
-
+        <CreatePostModal onClose={() => {}}/>
       )}
     </div>
   )

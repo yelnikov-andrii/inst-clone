@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router'
-import { HeartIcon, HomeIcon, LogoIcon, LogoIconMini, MessagesIcon, SearchIcon } from '../icons'
+import { CreateIcon, HeartIcon, HomeIcon, LogoIcon, LogoIconMini, MessagesIcon, SearchIcon } from '../icons'
 import SidebarLink from './SidebarLink'
 import SidebarButton from './SidebarButton'
-import UserIcon from '../../images/user-icon.jpg';
 import Drawer from './Drawer'
 import { useDispatch, useSelector } from 'react-redux';
 import { openDrawer } from '../../features/drawer/drawerReducer';
@@ -14,10 +13,13 @@ import clsx from 'clsx'
 import { useLogout } from '../../hooks/auth/useLogOut'
 import Avatar from '../common/Avatar'
 import { url } from '../../utils/url'
+import { openModal } from '../../features/modal/modalSlice'
+import CreatePostModal from '../common/CreatePostModal'
 
 enum BlockNameEnum {
     SEARCH = 'search',
     NOTIFICATIONS = 'notifications',
+    CREATE = 'create'
 }
 
 const Sidebar = ({ mini }: { mini?: boolean }) => {
@@ -27,6 +29,8 @@ const Sidebar = ({ mini }: { mini?: boolean }) => {
     const [isSidedbarBottom, setIsSidebarBottom] = useState(false);
     const [isSidebarMini, setIsSidebarMini] = useState(false);
     const myInfo = useSelector((state: RootState) => state.myInfo.myInfo);
+    const isModalOpen = useSelector((state: RootState) => state.modal.isOpen);
+    const posts = useSelector((state: RootState) => state.posts.posts);
 
     function handleOpen(value: BlockNameEnum) {
         setBlockName(value);
@@ -112,6 +116,14 @@ const Sidebar = ({ mini }: { mini?: boolean }) => {
                     title={(isSidebarMini || mini) ? '' : 'Профіль'}
                     icon={<Avatar src={myInfo?.avatar ? `${url}/${myInfo?.avatar}` : ''} width={24} height={24} />}
                 />
+                {posts.length > 0 && (
+                    <SidebarButton
+                        title={(isSidebarMini || mini) ? '' : 'Створити'}
+                        icon={<CreateIcon />}
+                        onClick={() => { dispatch(openModal()) }}
+                        active={blockName === BlockNameEnum.CREATE}
+                    />
+                )}
                 <button onClick={handleLogout}>
                     Logout
                 </button>
@@ -119,6 +131,9 @@ const Sidebar = ({ mini }: { mini?: boolean }) => {
             <Drawer>
                 {blockName === 'search' ? <SearchSIdeBlock /> : blockName === 'notifications' ? <NotificationsSideBlock /> : null}
             </Drawer>
+            {isModalOpen && (
+                <CreatePostModal onClose={() => {}}/>
+            )}
         </aside>
     )
 }

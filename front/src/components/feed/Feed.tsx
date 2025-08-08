@@ -1,16 +1,28 @@
 import PostCard from './PostCard'
-import Card1 from '../../images/postcard1.jpg'
-import Card2 from '../../images/postcard2.jpg'
-import Card3 from '../../images/postcard3.jpg'
-import Card4 from '../../images/postcard4.jpg'
+import { useGetFeed } from '../../hooks/feed/useGetFeed'
 
 const Feed = () => {
+    const { feed, feedError } = useGetFeed();
+    console.log(feed, 'feed');
+
+    if (feedError) {
+        return (
+            <div>
+                <p className='text-center font-semibold text-red-500'>
+                    {feedError}
+                </p>
+            </div>
+        )
+    }
+
     return (
         <div className='flex flex-col gap-20 items-center w-full'>
-            <PostCard post={{ images: [Card1, Card2] }} />
-            <PostCard post={{ images: [Card2] }} />
-            <PostCard post={{ images: [Card3] }} />
-            <PostCard post={{ images: [Card4] }} />
+            {feed?.map((feedItem: FeedItemI) => (
+                <PostCard 
+                  feedItem={feedItem}
+                  key={feedItem.id}
+                />
+            ))}
         </div>
     )
 }

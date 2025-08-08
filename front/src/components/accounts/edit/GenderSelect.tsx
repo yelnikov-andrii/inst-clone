@@ -1,5 +1,6 @@
+import type React from "react"
 
-const GenderSelect = ({ value, onChange }: { value: string, onChange: any }) => {
+const GenderSelect = ({ value, onChange }: { value: string, onChange: React.ChangeEventHandler<HTMLSelectElement> }) => {
 
     return (
         <select value={value} name="gender" onChange={onChange} className='w-full bg-ig-highlight-background px-4 py-2 rounded-lg border border-ig-separator outline-none'>

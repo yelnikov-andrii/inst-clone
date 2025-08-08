@@ -62,7 +62,6 @@ async function getAll(req, res) {
             }
         });
 
-        console.log(likes, 'likes');
         const likesNormalized = likes.map(like => like.dataValues);
         res.status(200).json(likesNormalized);
 

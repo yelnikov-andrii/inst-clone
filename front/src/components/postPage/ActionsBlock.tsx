@@ -5,15 +5,20 @@ import { useLikePost } from '../../hooks/likes/useLikePost';
 import { useSelector } from 'react-redux';
 import type { RootState } from '../../app/store';
 import { useEffect, useState } from 'react';
-import { useGetLikeStatus } from '../../hooks/likes/useGetLikeStatus';
+import { useSavePost } from '../../hooks/saved/useSavePost';
+import { useGetPostSavedStatus } from '../../hooks/saved/useGetPostSavedStatus';
+import LikesCount from '../common/LikesCount';
 
 const ActionsBlock = ({ post, handleFocusInput }: { post: PostI, handleFocusInput: () => void }) => {
-    const { likesCount, likeStatus, getLikes, error } = useGetLikeStatus();
-    const { error: errorLike, likePost } = useLikePost();
+    const [count, setCount] = useState(0);
+    const { error: errorLike, likePost, errorGetLikes } = useLikePost(post.id, setCount);
     const user = useSelector((state: RootState) => state.auth.user);
     const [liked, setLiked] = useState(false);
-    const [count, setCount] = useState(0);
+    const [isSaved, setIsSaved] = useState(false);
+    const { savedStatus } = useGetPostSavedStatus(post, user);
 
+    const { savePost } = useSavePost(post);
+ 
     function handleLike() {
         if (user && post) {
             likePost(post.id, user.id);
@@ -29,20 +34,18 @@ const ActionsBlock = ({ post, handleFocusInput }: { post: PostI, handleFocusInpu
     }
 
     useEffect(() => {
-        if (user && post) {
-            getLikes(post.id, user.id);
-        }
-    }, [user, post]);
-
-    useEffect(() => {
-        if (likeStatus) {
-            setLiked(true);
+        if (savedStatus) {
+            setIsSaved(true);
         } else {
-            setLiked(false);
+            setIsSaved(false);
         }
+    }, [savedStatus])
 
-        setCount(likesCount);
-    }, [likeStatus, likesCount]);
+    function handleSavePost() {
+        if (post && user) {
+            savePost(post, user);
+        }
+    }
 
     return (
         <div>
@@ -56,20 +59,15 @@ const ActionsBlock = ({ post, handleFocusInput }: { post: PostI, handleFocusInpu
                     </button>
                 </div>
                 <div>
-                    <button>
-                        <SavedIcon />
+                    <button onClick={handleSavePost}>
+                        <SavedIcon active={isSaved} />
                     </button>
                 </div>
             </div>
-            <div>
-                {count > 0 ? (<p className='font-semibold'>{`${count} вподобань`}</p>) : (<><p>Станьте першим, хто <button className='text-black font-medium'>вподобає це</button></p></>)}
-            </div>
-            <DateCreated post={post} />
-            {error && (
-                <Globalsnackbar text={error} />
-            )}
-            {errorLike && (
-                <Globalsnackbar text={errorLike} />
+            <LikesCount count={count} />
+            <DateCreated createdAt={post.createdAt} />
+            {(errorGetLikes || errorLike) && (
+                <Globalsnackbar text={errorLike ? errorLike : errorGetLikes} />
             )}
         </div>
     )

@@ -1,5 +1,4 @@
-import React from 'react'
-import InlineButton from '../ui/InlineButton'
+import InlineButton from '../../ui/InlineButton'
 
 const SavedDefault = () => {
     return (

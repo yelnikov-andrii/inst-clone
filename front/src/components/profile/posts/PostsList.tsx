@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
 import type { RootState } from '../../../app/store';
-import Post from './Post';
+import Post from '../../common/Post';
 
 const PostsList = () => {
     const posts = useSelector((state: RootState) => state.posts.posts);

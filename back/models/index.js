@@ -124,3 +124,19 @@ User.hasMany(Comment, {foreignKey: 'userId'});
 Comment.belongsTo(User, {foreignKey: 'userId'});
 
 Comment.sync();
+
+export const Saved = sequelize.define('insta_saved', {
+    id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
+    }
+});
+
+Post.hasMany(Saved, {foreignKey: 'postId'});
+Saved.belongsTo(Post, {foreignKey: 'postId'});
+
+User.hasMany(Saved, {foreignKey: 'userId'});
+Saved.belongsTo(User, {foreignKey: 'userId'});
+
+Saved.sync();

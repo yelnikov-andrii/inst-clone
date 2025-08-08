@@ -1,5 +1,5 @@
 
-const DiscardBlock = ({ discard, notDiscard }: { discard: any, notDiscard: any }) => {
+const DiscardBlock = ({ discard, notDiscard }: { discard: () => void, notDiscard: () => void }) => {
     return (
         <div className='rounded-xl py-2 px-3 bg-white'>
             <p className='text-center text-xl mb-2'>

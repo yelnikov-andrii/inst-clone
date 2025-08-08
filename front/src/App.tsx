@@ -5,6 +5,7 @@ import { logIn, setAuthLoaded } from "./features/auth/authSlice";
 import GlobalLoader from "./components/common/GlobalLoader";
 import { useGetMe } from "./hooks/auth/useGetMe";
 import AppRoutes from "./appRoutes/AppRoutes";
+import { useGetFeed } from "./hooks/feed/useGetFeed";
 
 
 function App() {

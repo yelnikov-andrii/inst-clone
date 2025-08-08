@@ -7,7 +7,7 @@ import Direct from "../pages/Direct";
 import DefaultMainDirect from "../components/direct/DefaultMainDirect";
 import UserMainDirect from "../components/direct/UserMainDirect";
 import Profile from "../pages/Profile";
-import Saved from "../components/profile/Saved";
+import Saved from "../components/profile/saved/Saved";
 import Tagged from "../components/profile/Tagged";
 import Activate from "../pages/Activate";
 import { useSelector } from "react-redux";
@@ -19,6 +19,8 @@ import Notifications from "../components/accounts/notifications/Notifications";
 import PublicRoute from "../components/common/PubliRoute";
 import Posts from "../components/profile/posts/Posts";
 import PostPage from "../pages/PostPage";
+import SavedAllPosts from "../pages/SavedAllPosts";
+import PostCommentsPage from "../pages/PostCommentsPage";
 
 const AppRoutes = () => {
     const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
@@ -45,8 +47,10 @@ const AppRoutes = () => {
                 <Route path="/:nickname/saved" element={<Saved />} />
                 <Route path="/:nickname/tagged" element={<Tagged />} />
             </Route>
-            <Route path="p/:postId" element={<ProtectedRoute><PostPage /></ProtectedRoute>}>
+            <Route path="/:nickname/saved/all-posts" element={<ProtectedRoute><SavedAllPosts /></ProtectedRoute>} />
+            <Route path="/p/:postId" element={<ProtectedRoute><PostPage /></ProtectedRoute>}>
             </Route>
+            <Route path="/p/:postId/comments" element={<ProtectedRoute><PostCommentsPage /></ProtectedRoute>} />
         </Routes>
     )
 }

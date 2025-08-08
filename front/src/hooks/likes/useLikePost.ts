@@ -1,9 +1,13 @@
-import { useState } from "react";
+import { useEffect, useState, type Dispatch, type SetStateAction } from "react";
 import { url } from "../../utils/url";
+import { useGetLikeStatus } from "./useGetLikeStatus";
+import { useSelector } from "react-redux";
+import type { RootState } from "../../app/store";
 
-export const useLikePost = () => {
+export const useLikePost = (postId: number, setCount: Dispatch<SetStateAction<number>>) => {
     const [error, setError] = useState('');
     const [liked, setLiked] = useState(false);
+    const user = useSelector((state: RootState) => state.auth.user);
 
     async function likePost(postId: number, userId: number) {
         try {
@@ -32,8 +36,12 @@ export const useLikePost = () => {
                 setError("Невідома помилка")
             }
 
-        } catch (e: any) {
-            setError(e.message || "Помилка сервера");
+        } catch (e: unknown) {
+            if (e instanceof Error) {
+                setError(e.message);
+            } else {
+                setError("Помилка невідома");
+            }
         } finally {
             setTimeout(() => {
                 setError('');
@@ -41,5 +49,23 @@ export const useLikePost = () => {
         }
     }
 
-    return { error, likePost, liked };
+    const { likesCount, likeStatus, getLikes, error: errorGetLikes } = useGetLikeStatus();
+
+    useEffect(() => {
+        if (likeStatus) {
+            setLiked(true);
+        } else {
+            setLiked(false);
+        }
+
+        setCount(likesCount);
+    }, [likeStatus, likesCount]);
+
+    useEffect(() => {
+        if (user && postId) {
+            getLikes(postId, user.id);
+        }
+    }, [user, postId]);
+
+    return { error, likePost, liked, errorGetLikes };
 }

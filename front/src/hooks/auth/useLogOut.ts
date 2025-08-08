@@ -2,6 +2,9 @@ import { useDispatch } from "react-redux";
 import { url } from "../../utils/url"
 import { logOut } from "../../features/auth/authSlice";
 import { useNavigate } from "react-router";
+import { clearMyInfo } from "../../features/myInfo/myInfoSlice";
+import { clearPosts } from "../../features/posts/postsSlice";
+import { clearFeed } from "../../features/feed/feedSlice";
 
 export const useLogout = () => {
     const dispatch = useDispatch();
@@ -22,7 +25,10 @@ export const useLogout = () => {
             localStorage.removeItem('inst_accessToken');
             localStorage.removeItem('inst_user');
             dispatch(logOut());
-            console.log('finally')
+            dispatch(clearMyInfo());
+            dispatch(clearPosts());
+            dispatch(clearFeed());
+
             navigate('/accounts/login');
         }
     }
