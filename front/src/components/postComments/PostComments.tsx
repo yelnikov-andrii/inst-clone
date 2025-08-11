@@ -3,10 +3,8 @@ import { url } from '../../utils/url';
 import UserIcon from '../../images/user-icon.jpg';
 import Comment from './Comment';
 
-const PostComments = ({ post, comments }: { post: PostI | undefined, comments: CommentI[] }) => {
+const PostComments = ({ post, comments, getPostComments }: { post: PostI | undefined, comments: CommentI[], getPostComments: (postId: number) => void }) => {
     let avatarUrl = '';
-
-    console.log(comments, 'comments')
 
     if (post?.Insta_User?.insta_user_info?.avatar) {
         if (!post.Insta_User?.insta_user_info.avatar.includes('http')) {
@@ -33,6 +31,8 @@ const PostComments = ({ post, comments }: { post: PostI | undefined, comments: C
                     <Comment 
                       comment={comment}
                       key={comment.id}
+                      post={post}
+                      getPostComments={getPostComments}
                     />
                 ))}
             </div>

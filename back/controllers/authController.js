@@ -4,6 +4,8 @@ import { ApiError } from "../utils/ApiError.js";
 import { jwtService } from "../services/jwtService.js";
 import bcrypt from 'bcrypt';
 import { TokenService } from "../services/tokenService.js";
+import jwt from 'jsonwebtoken';
+import 'dotenv/config'
 
 async function register(req, res) {
     const { login, password, nickname, fullname } = req.body;
@@ -120,10 +122,35 @@ async function logout(req, res) {
             secure: true
         });
 
-        return res.status(200).json({message: 'Успішний вихід'})
+        return res.status(200).json({ message: 'Успішний вихід' })
 
     } catch (e) {
         res.status(e.status || 500).json({ message: e.message || 'Помилка сервера' });
+    }
+}
+
+async function refresh(req, res) {
+    try {
+        const { refreshToken } = req?.cookies;
+
+        if (!refreshToken) {
+            throw ApiError.UnAuthorized();
+        }
+
+        jwt.verify(refreshToken, process.env.JWT_SECRET, (err, user) => {
+            if (err) {
+                throw ApiError.UnAuthorized();
+            }
+
+            const { exp, iat, ...payload } = user;
+
+            const accessToken = jwtService.generateAccessToken(payload);
+            res.status(201).json({ accessToken });
+        })
+
+
+    } catch(e) {
+         res.status(e.status || 500).json({ message: e.message || 'Помилка сервера' });
     }
 }
 
@@ -131,5 +158,6 @@ export const authController = {
     register,
     activate,
     login,
-    logout
+    logout,
+    refresh
 }

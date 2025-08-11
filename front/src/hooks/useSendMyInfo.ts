@@ -3,6 +3,7 @@ import { url } from "../utils/url";
 import { useSelector } from "react-redux";
 import type { RootState } from "../app/store";
 import { useGetMe } from "./auth/useGetMe";
+import { fetchWithAuth } from "../utils/fetchWithAuth";
 
 export const useSendMyInfo = () => {
     const myInfo = useSelector((state: RootState) => state.myInfo.myInfo);
@@ -31,7 +32,7 @@ export const useSendMyInfo = () => {
 
         try {
             setFetchingData(prev => ({ ...prev, loading: true }));
-            const response = await fetch(`${url}/userinfo`, {
+            const response = await fetchWithAuth(`${url}/userinfo`, {
                 method: myInfo ? "PATCH" : "POST",
                 credentials: 'include',
                 body: formData

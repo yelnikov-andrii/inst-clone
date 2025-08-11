@@ -1,9 +1,12 @@
 import PostCard from './PostCard'
 import { useGetFeed } from '../../hooks/feed/useGetFeed'
+import { useSelector } from 'react-redux';
+import type { RootState } from '../../app/store';
 
 const Feed = () => {
-    const { feed, feedError } = useGetFeed();
-    console.log(feed, 'feed');
+    useGetFeed();
+    const feedError = useSelector((state: RootState) => state.feed.error);
+    const feed = useSelector((state: RootState) => state.feed.feed);
 
     if (feedError) {
         return (

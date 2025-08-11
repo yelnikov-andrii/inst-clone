@@ -13,4 +13,8 @@ export class ApiError extends Error {
     static Conflict(message) {
         return new ApiError(409, message);
     }
+
+    static UnAuthorized() {
+        return new ApiError(401, "Не авторизований")
+    }
 }

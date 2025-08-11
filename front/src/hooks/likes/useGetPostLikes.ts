@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { url } from "../../utils/url";
+import { fetchWithAuth } from "../../utils/fetchWithAuth";
 
 export const useGetPostLikes = (postId: number) => {
     const [likes, setLikes] = useState<LikeInterface[]>([]);
@@ -13,7 +14,7 @@ export const useGetPostLikes = (postId: number) => {
                 setError("Пост не існує");
             }
 
-            const response = await fetch(`${url}/posts/${postId}/likes`, {
+            const response = await fetchWithAuth(`${url}/posts/${postId}/likes`, {
                 method: 'GET',
                 credentials: 'include',
                 headers: {

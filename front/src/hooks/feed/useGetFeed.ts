@@ -1,12 +1,13 @@
-import { useEffect, useState } from "react"
-import { useSelector } from "react-redux";
+import { useEffect } from "react"
+import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "../../app/store";
 import { url } from "../../utils/url";
+import { getFeedError, getFeedFromServer } from "../../features/feed/feedSlice";
+import { fetchWithAuth } from "../../utils/fetchWithAuth";
 
 export const useGetFeed = () => {
-    const [feed, setFeed] = useState<FeedItemI[]>([]);
-    const [feedError, setFeedError] = useState('');
     const user = useSelector((state: RootState) => state.auth.user);
+    const dispatch = useDispatch();
 
     async function getFeed() {
         try {
@@ -14,31 +15,32 @@ export const useGetFeed = () => {
                 return;
             }
 
-            const response = await fetch(`${url}/feed/${user.id}`, {
+            const response = await fetchWithAuth(`${url}/feed/${user.id}`, {
                 headers: {
-                    "Content-Type": 'application/json'
+                    "Content-Type": "application/json"
                 },
                 credentials: 'include'
             });
 
             if (response.ok) {
                 const res = await response.json();
-                setFeed(res);
+                dispatch(getFeedFromServer(res));
             }
-        } catch(e) {
+        } catch (e) {
             if (e instanceof Error) {
-                setFeedError(e.message);
+                dispatch(getFeedError(e.message))
             } else {
-                setFeedError("Помилка при отриманні стрічки новин")
+                dispatch(getFeedError("Помилка при отриманні стрічки новин"))
             }
         }
     }
 
     useEffect(() => {
         if (user) {
+            console.log('get feed in useeffect')
             getFeed();
         }
     }, [user]);
 
-    return { feed, feedError };
+    return { getFeed };
 }

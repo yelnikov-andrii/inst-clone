@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useState, type Dispatch, type SetStateAction } from "react";
 import { useSelector } from "react-redux";
 import type { RootState } from "../../app/store";
 import { url } from "../../utils/url";
+import { fetchWithAuth } from "../../utils/fetchWithAuth";
 
-export const useCreateComment = () => {
+export const useCreateComment = (setCommentWasCreated: Dispatch<SetStateAction<boolean>>) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
     const user = useSelector((state: RootState) => state.auth.user);
@@ -19,7 +20,7 @@ export const useCreateComment = () => {
                 return;
             }
 
-            const response = await fetch(`${url}/comments`, {
+            const response = await fetchWithAuth(`${url}/comments`, {
                 method: "POST",
                 credentials: 'include',
                 headers: {
@@ -32,6 +33,7 @@ export const useCreateComment = () => {
                 setError("Не вдалося прокоментувати");
             } else {
                 setText("");
+                setCommentWasCreated(true);
             }
 
         } catch (e: unknown) {

@@ -3,6 +3,7 @@ import { url } from "../../utils/url";
 import { useGetPostSavedStatus } from "./useGetPostSavedStatus";
 import { useSelector } from "react-redux";
 import type { RootState } from "../../app/store";
+import { fetchWithAuth } from "../../utils/fetchWithAuth";
 
 export const useSavePost = (post: PostI) => {
     const [saved, setSaved] = useState(false);
@@ -17,7 +18,7 @@ export const useSavePost = (post: PostI) => {
                 return;
             }
 
-            const response = await fetch(`${url}/posts/${post.id}/save`, {
+            const response = await fetchWithAuth(`${url}/posts/${post.id}/save`, {
                 headers: {
                     "Content-Type": "application/json",
                 },

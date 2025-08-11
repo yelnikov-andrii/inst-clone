@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { url } from "../../utils/url";
+import { fetchWithAuth } from "../../utils/fetchWithAuth";
 
 export const useGetLikeStatus = () => {
     const [likesCount, setLikesCount] = useState<number>(0);
@@ -13,7 +14,7 @@ export const useGetLikeStatus = () => {
                 setError("Пост не існує");
             }
 
-            const response = await fetch(`${url}/posts/${postId}/like-status?userId=${userId}`, {
+            const response = await fetchWithAuth(`${url}/posts/${postId}/like-status?userId=${userId}`, {
                 method: 'GET',
                 credentials: 'include',
                 headers: {

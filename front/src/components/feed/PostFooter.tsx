@@ -2,17 +2,22 @@ import PostFooterButton from './PostFooterButton'
 import { CommentIcon, HeartIcon, ShareIcon } from '../icons'
 import { Link } from 'react-router'
 import { useLikePost } from '../../hooks/likes/useLikePost'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import type { RootState } from '../../app/store'
 import LikesCount from '../common/LikesCount'
+import CreateCommentForm from '../common/CreateCommentForm'
+import { useGetFeed } from '../../hooks/feed/useGetFeed'
 
 const PostFooter = ({ feedItem }: { feedItem: FeedItemI }) => {
     const [count, setCount] = useState(0);
     const user = useSelector((state: RootState) => state.auth.user);
     const [liked, setLiked] = useState(false);
+    const [commentWasCreated, setCommentWasCreated] = useState(false);
 
     const { likePost } = useLikePost(feedItem.id, setCount);
+
+    const { getFeed } = useGetFeed();
 
     function handleLike() {
         if (user && feedItem) {
@@ -28,7 +33,11 @@ const PostFooter = ({ feedItem }: { feedItem: FeedItemI }) => {
         }
     }
 
-    console.log(feedItem, 'feed items')
+    useEffect(() => {
+        if (commentWasCreated) {
+            getFeed();
+        }
+    }, [commentWasCreated]);
 
     return (
         <div className='mt-4'>
@@ -48,19 +57,20 @@ const PostFooter = ({ feedItem }: { feedItem: FeedItemI }) => {
                 <b className='font-bold mr-1'>{feedItem.Insta_User.nickname}</b>
                 {feedItem.description}
             </div>
-            {feedItem?.comment_insts?.length > 0 && (
+            {feedItem?.comment_insts?.length > 0 ? (
                 <div className='mb-1'>
                     <Link to={`/p/${feedItem.id}/comments`} className='text-ig-secondary-text'>
                         Переглянути всі коментарі: {feedItem.comment_insts.length}
                     </Link>
                 </div>
+            ) : (
+            <CreateCommentForm 
+              postId={feedItem.id}
+              setCommentWasCreated={setCommentWasCreated}
+              
+            />
             )}
-            <form>
-                <input
-                    className='w-full placeholder:text-ig-secondary-text border-none outline-none py-1'
-                    placeholder='Додати коментар...'
-                />
-            </form>
+
         </div>
     )
 }

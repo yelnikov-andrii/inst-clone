@@ -3,6 +3,7 @@ import { url } from "../../utils/url";
 import { useGetLikeStatus } from "./useGetLikeStatus";
 import { useSelector } from "react-redux";
 import type { RootState } from "../../app/store";
+import { fetchWithAuth } from "../../utils/fetchWithAuth";
 
 export const useLikePost = (postId: number, setCount: Dispatch<SetStateAction<number>>) => {
     const [error, setError] = useState('');
@@ -19,7 +20,7 @@ export const useLikePost = (postId: number, setCount: Dispatch<SetStateAction<nu
                 setError("Невідомий користувач");
             }
 
-            const response = await fetch(`${url}/posts/${postId}/like`, {
+            const response = await fetchWithAuth(`${url}/posts/${postId}/like`, {
                 method: 'POST',
                 headers: {
                     "Content-Type": "application/json"

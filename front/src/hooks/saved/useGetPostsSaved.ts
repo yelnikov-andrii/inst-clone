@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import { useSelector } from "react-redux";
 import type { RootState } from "../../app/store";
 import { url } from "../../utils/url";
+import { fetchWithAuth } from "../../utils/fetchWithAuth";
 
 export const useGetPostsSaved = () => {
     const [savedPosts, setSavedPosts] = useState<SavedPostI[]>([]);
@@ -13,7 +14,7 @@ export const useGetPostsSaved = () => {
             if (!user) {
                 setError("Невідомий користувач")
             } else {
-                const response = await fetch(`${url}/posts-saved?userId=${user.id.toString()}`, {
+                const response = await fetchWithAuth(`${url}/posts-saved?userId=${user.id.toString()}`, {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json"
@@ -28,9 +29,12 @@ export const useGetPostsSaved = () => {
                     setError("Помилка при отриманні постів")
                 }
             }
-        } catch (e) {
-            console.log(e, 'error get posts saved')
-            setError(e?.message || "Невідома помилка");
+        } catch (e: unknown) {
+            if (e instanceof Error) {
+                setError(e.message);
+            } else {
+                setError("Невідома помилка")
+            }
         } finally {
             setTimeout(() => {
                 setError('');

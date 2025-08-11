@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { url } from "../../utils/url";
+import { fetchWithAuth } from "../../utils/fetchWithAuth";
 
 export const useGetPostSavedStatus = (post: PostI, user: UserI | null) => {
     const [savedStatus, setSavedStatus] = useState(false);
@@ -15,7 +16,7 @@ export const useGetPostSavedStatus = (post: PostI, user: UserI | null) => {
                 setError("користувач не існує");
             }
 
-            const response = await fetch(`${url}/posts/${post.id}/saved-status?userId=${user?.id}`, {
+            const response = await fetchWithAuth(`${url}/posts/${post.id}/saved-status?userId=${user?.id}`, {
                 method: 'GET',
                 credentials: 'include',
                 headers: {

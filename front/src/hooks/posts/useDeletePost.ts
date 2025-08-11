@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { url } from "../../utils/url";
 import { useNavigate } from "react-router";
+import { fetchWithAuth } from "../../utils/fetchWithAuth";
 
 export const useDeletePost = () => {
     const [message, setMessage] = useState('');
@@ -8,7 +9,7 @@ export const useDeletePost = () => {
 
     async function deletePost(postId: number, userId: number) {
         try {
-            const response = await fetch(`${url}/posts`, {
+            const response = await fetchWithAuth(`${url}/posts`, {
                 method: 'DELETE',
                 headers: {
                     "Content-Type": "application/json"

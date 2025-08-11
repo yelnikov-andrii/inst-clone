@@ -7,3 +7,4 @@ authRouter.post('/register', authController.register);
 authRouter.post('/activate', authController.activate);
 authRouter.post('/login', authController.login);
 authRouter.post('/logout', authController.logout);
+authRouter.post('/refresh', authController.refresh);

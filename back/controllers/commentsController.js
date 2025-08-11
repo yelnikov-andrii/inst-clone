@@ -1,4 +1,5 @@
 import { Post, Comment, User, UserInfo } from "../models/index.js";
+import { ApiError } from "../utils/ApiError.js";
 
 async function create(req, res) {
     const { postId, userId, text } = req.body;
@@ -63,7 +64,32 @@ async function getPostComments(req, res) {
     }
 }
 
+async function deleteComment(req, res) {
+    try {
+        const { commentId } = req.params;
+        if (!commentId) {
+            throw ApiError.BadRequest("Невідомий комент");
+        }
+
+        const comment = await Comment.findOne({
+            where: {
+                id: commentId
+            }
+        });
+
+        if (comment) {
+            await comment.destroy();
+            res.status(200).json({ message: "Комент видалений" })
+        } else {
+            throw ApiError.BadRequest("Неможливо видалити комент");
+        }
+    } catch (e) {
+        res.status(e.status || 500).json({ message: e.message || 'Помилка сервера' });
+    }
+}
+
 export const commentsController = {
     create,
-    getPostComments
+    getPostComments,
+    deleteComment
 }

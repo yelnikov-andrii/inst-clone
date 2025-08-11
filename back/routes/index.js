@@ -7,10 +7,14 @@ import { likesRouter } from './likesRouter.js';
 import { commentsRouter } from './CommentsRouter.js';
 import { savedRouter } from './savedRouter.js';
 import { feedRouter } from './feedRouter.js';
+import { authMiddleware } from '../middleware/auth.js';
 
 export const router = express.Router();
 
 router.use(authRouter);
+
+router.use(authMiddleware);
+
 router.use(userInfoRouter);
 router.use(postsRouter);
 router.use(mediaRouter);

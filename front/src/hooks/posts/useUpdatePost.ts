@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import { url } from "../../utils/url";
 import { closeModal } from "../../features/modal/modalSlice";
 import { useNavigate } from "react-router";
+import { fetchWithAuth } from "../../utils/fetchWithAuth";
 
 interface PostStateI {
     files: File[];
@@ -30,7 +31,7 @@ export const useUpdatePost = () => {
                 return;
             }
 
-            const response = await fetch(`${url}/posts`, {
+            const response = await fetchWithAuth(`${url}/posts`, {
                 method: "PATCH",
                 credentials: 'include',
                 headers: {

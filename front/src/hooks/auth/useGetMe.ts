@@ -1,13 +1,14 @@
 import { useDispatch } from "react-redux";
 import { url } from "../../utils/url";
 import { getMyInfo } from "../../features/myInfo/myInfoSlice";
+import { fetchWithAuth } from "../../utils/fetchWithAuth";
 
 export const useGetMe = () => {
     const dispatch = useDispatch();
 
     async function getUserInfo(userId: number) {
         try {
-            const response = await fetch(`${url}/userinfo/${userId}`);
+            const response = await fetchWithAuth(`${url}/userinfo/${userId}`);
             if (response.ok) {
                 const res = await response.json();
                 dispatch(getMyInfo(res));

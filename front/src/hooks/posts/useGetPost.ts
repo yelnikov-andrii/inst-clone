@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { url } from "../../utils/url";
+import { fetchWithAuth } from "../../utils/fetchWithAuth";
 
 export const useGetPost = () => {
     const [post, setPost] = useState<PostI>();
@@ -13,7 +14,7 @@ export const useGetPost = () => {
                 return;
             }
 
-            const response = await fetch(`${url}/posts/${postId}`, {
+            const response = await fetchWithAuth(`${url}/posts/${postId}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': "application/json"

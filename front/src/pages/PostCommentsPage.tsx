@@ -48,6 +48,7 @@ const PostCommentsPage = () => {
                     <PostComments
                         post={post}
                         comments={comments}
+                        getPostComments={getPostComments}
                     />
                 </main>
             </div>

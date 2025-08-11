@@ -1,6 +1,7 @@
 import { useDispatch } from "react-redux"
 import { url } from "../../utils/url";
 import { getPosts } from "../../features/posts/postsSlice";
+import { fetchWithAuth } from "../../utils/fetchWithAuth";
 
 export const useGetPosts = () => {
     const dispatch = useDispatch();
@@ -10,7 +11,7 @@ export const useGetPosts = () => {
             return;
         }
         try {
-            const response = await fetch(`${url}/posts?user_id=${user?.id}`, {
+            const response = await fetchWithAuth(`${url}/posts?user_id=${user?.id}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': "application/json"

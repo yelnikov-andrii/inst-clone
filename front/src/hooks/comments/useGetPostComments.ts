@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { url } from "../../utils/url";
+import { fetchWithAuth } from "../../utils/fetchWithAuth";
 
 export const useGetPostComments = () => {
     const [comments, setComments] = useState([]);
@@ -10,7 +11,7 @@ export const useGetPostComments = () => {
                 return;
             }
 
-            const response = await fetch(`${url}/comments-post/${postId}`, {
+            const response = await fetchWithAuth(`${url}/comments-post/${postId}`, {
                 method: "GET",
                 credentials: 'include',
                 headers: {

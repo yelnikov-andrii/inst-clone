@@ -4,6 +4,7 @@ import type { RootState } from "../../app/store";
 import { url } from "../../utils/url";
 import { useNavigate } from "react-router";
 import { closeModal } from "../../features/modal/modalSlice";
+import { fetchWithAuth } from "../../utils/fetchWithAuth";
 
 export const useCreatePost = () => {
     const [loading, setLoading] = useState(false);
@@ -36,7 +37,7 @@ export const useCreatePost = () => {
         }
 
         try {
-            const response = await fetch(`${url}/posts`, {
+            const response = await fetchWithAuth(`${url}/posts`, {
                 method: "POST",
                 credentials: 'include',
                 body: formData
