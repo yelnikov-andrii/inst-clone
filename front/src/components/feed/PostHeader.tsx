@@ -1,27 +1,20 @@
+import { Link } from 'react-router';
 import UserIcon from '../../images/user-icon.jpg'
-import { url } from '../../utils/url';
 import Avatar from '../common/Avatar';
 import DateCreated from '../common/DateCreated';
 import { ButtonDots } from '../icons';
+import { createProfileUrl } from '../../utils/createProfileUrl';
 
 const PostHeader = ({ feedItem }: { feedItem: FeedItemI }) => {
-    let avatarUrl = '';
-
-    if (feedItem?.Insta_User?.insta_user_info?.avatar) {
-        if (!feedItem.Insta_User?.insta_user_info.avatar.includes('http')) {
-            avatarUrl = `${url}/${feedItem.Insta_User?.insta_user_info.avatar}`;
-        } else {
-            avatarUrl = feedItem.Insta_User?.insta_user_info.avatar;
-        }
-    }
+    const avatarUrl = createProfileUrl(feedItem?.Insta_User?.insta_user_info?.avatar);
 
     return (
         <div className='flex justify-between items-center w-full mb-5'>
             <div className='flex gap-2 items-center'>
                 <Avatar width={32} height={32} src={avatarUrl ? avatarUrl : UserIcon} />
-                <span className='font-semibold text-black'>
+                <Link className='font-semibold text-black' to={`/${feedItem.Insta_User.nickname}`}>
                     {feedItem.Insta_User.nickname}
-                </span>
+                </Link>
                 <span className='text-ig-secondary-text'>
                     •
                 </span>

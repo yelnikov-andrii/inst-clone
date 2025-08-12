@@ -1,19 +1,11 @@
 import Avatar from '../common/Avatar'
-import { url } from '../../utils/url';
 import UserIcon from '../../images/user-icon.jpg';
 import Comment from './Comment';
+import { createProfileUrl } from '../../utils/createProfileUrl';
 
 const PostComments = ({ post, comments, getPostComments }: { post: PostI | undefined, comments: CommentI[], getPostComments: (postId: number) => void }) => {
-    let avatarUrl = '';
+    const avatarUrl = createProfileUrl(post?.Insta_User?.insta_user_info?.avatar);
 
-    if (post?.Insta_User?.insta_user_info?.avatar) {
-        if (!post.Insta_User?.insta_user_info.avatar.includes('http')) {
-            avatarUrl = `${url}/${post.Insta_User?.insta_user_info.avatar}`;
-        } else {
-            avatarUrl = post.Insta_User?.insta_user_info.avatar;
-        }
-    }
-    
     return (
         <div>
             <div className='flex gap-2 items-center'>
@@ -28,11 +20,11 @@ const PostComments = ({ post, comments, getPostComments }: { post: PostI | undef
             <div className='w-full bg-ig-separator h-[1px] my-4' />
             <div>
                 {comments.map((comment) => (
-                    <Comment 
-                      comment={comment}
-                      key={comment.id}
-                      post={post}
-                      getPostComments={getPostComments}
+                    <Comment
+                        comment={comment}
+                        key={comment.id}
+                        post={post}
+                        getPostComments={getPostComments}
                     />
                 ))}
             </div>

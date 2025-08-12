@@ -1,8 +1,6 @@
 import { useRef, useState } from 'react'
 import { url } from '../../utils/url';
 import Avatar from '../common/Avatar';
-import { useSelector } from 'react-redux';
-import type { RootState } from '../../app/store';
 import DateCreated from '../common/DateCreated';
 import ActionsBlock from './ActionsBlock';
 import PostComments from './PostComments';
@@ -12,10 +10,10 @@ import ChangePostModal from './ChangePostModal';
 import DeleteModal from './DeleteModal';
 import CreatePostModal from '../common/CreatePostModal';
 import CreateCommentForm from '../common/CreateCommentForm';
+import { createProfileUrl } from '../../utils/createProfileUrl';
+import UserIcon from '../../images/user-icon.jpg'
 
 const PostPageInfo = ({ post }: { post: PostI }) => {
-    const myInfo = useSelector((state: RootState) => state.myInfo.myInfo);
-    const user = useSelector((state: RootState) => state.auth.user);
     const [commentWasCreated, setCommentWasCreated] = useState(false);
     const [actionsModal, setActionsModal] = useState(false);
     const [deleteModal, setDeleteModal] = useState(false);
@@ -37,6 +35,8 @@ const PostPageInfo = ({ post }: { post: PostI }) => {
         setDeleteModal(false);
     }
 
+    const avatarUrl = createProfileUrl(post?.Insta_User?.avatar);
+
     return (
         <>
             <img src={`${url}/${post.post_media[0]?.filename}`} className='object-cover w-full max-h-[335px] md:max-h-none md:w-1/2' />
@@ -44,9 +44,9 @@ const PostPageInfo = ({ post }: { post: PostI }) => {
                 <div className='hidden md:block'>
                     <div className='flex justify-between mb-2 xl:mb-6'>
                         <div className='flex gap-4 items-center'>
-                            <Avatar src={myInfo?.avatar ? `${url}/${myInfo?.avatar}` : ''} width={32} height={32} />
+                            <Avatar src={avatarUrl ? avatarUrl : UserIcon} width={32} height={32} />
                             <b className='text-black md:text-lg font-medium'>
-                                {user?.nickname}
+                                {post?.Insta_User?.nickname}
                             </b>
                         </div>
                         <button onClick={handleOpenActionsMenu}>
@@ -54,11 +54,11 @@ const PostPageInfo = ({ post }: { post: PostI }) => {
                         </button>
                     </div>
                     <div className='flex gap-4'>
-                        <Avatar src={myInfo?.avatar ? `${url}/${myInfo?.avatar}` : ''} width={32} height={32} />
+                        <Avatar src={avatarUrl ? avatarUrl : UserIcon} width={32} height={32} />
                         <div>
                             <div className='flex gap-1'>
                                 <b className='text-black xl:text-lg font-medium'>
-                                    {user?.nickname}
+                                    {post?.Insta_User?.nickname}
                                 </b>
                                 <p className='xl:text-lg text-black'>
                                     {post.description}

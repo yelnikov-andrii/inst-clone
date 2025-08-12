@@ -29,7 +29,6 @@ export const useLikePost = (postId: number, setCount: Dispatch<SetStateAction<nu
                 body: JSON.stringify({ userId })
             });
 
-            console.log(response);
             if (response.ok) {
                 const res = await response.json();
                 setLiked(res.liked);

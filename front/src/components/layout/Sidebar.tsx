@@ -12,9 +12,10 @@ import NotificationsSideBlock from './NotificationsSideBlock'
 import clsx from 'clsx'
 import { useLogout } from '../../hooks/auth/useLogOut'
 import Avatar from '../common/Avatar'
-import { url } from '../../utils/url'
+import UserIcon from '../../images/user-icon.jpg'
 import { openModal } from '../../features/modal/modalSlice'
 import CreatePostModal from '../common/CreatePostModal'
+import { createProfileUrl } from '../../utils/createProfileUrl'
 
 enum BlockNameEnum {
     SEARCH = 'search',
@@ -29,6 +30,7 @@ const Sidebar = ({ mini }: { mini?: boolean }) => {
     const [isSidedbarBottom, setIsSidebarBottom] = useState(false);
     const [isSidebarMini, setIsSidebarMini] = useState(false);
     const myInfo = useSelector((state: RootState) => state.myInfo.myInfo);
+    const user = useSelector((state: RootState) => state.auth.user);
     const isModalOpen = useSelector((state: RootState) => state.modal.isOpen);
     const posts = useSelector((state: RootState) => state.posts.posts);
 
@@ -72,6 +74,8 @@ const Sidebar = ({ mini }: { mini?: boolean }) => {
         logout();
     }
 
+    const avatarUrl = createProfileUrl(myInfo?.avatar);
+
     return (
         <aside className={clsx('fixed right-0 z-30 overflow-x-hidden md:top-0 bottom-0 left-0 h-full pt-0 md:pt-10 border-r border-r-ig-separator border-t border-t-ig-separator bg-ig-secondary-background', {
             'right-shift top-shift': !mini,
@@ -112,9 +116,9 @@ const Sidebar = ({ mini }: { mini?: boolean }) => {
                     />
                 )}
                 <SidebarLink
-                    path='/profile'
+                    path={`/${user?.nickname}`}
                     title={(isSidebarMini || mini) ? '' : 'Профіль'}
-                    icon={<Avatar src={myInfo?.avatar ? `${url}/${myInfo?.avatar}` : ''} width={24} height={24} />}
+                    icon={<Avatar src={avatarUrl ? avatarUrl : UserIcon} width={24} height={24} />}
                 />
                 {posts.length > 0 && (
                     <SidebarButton

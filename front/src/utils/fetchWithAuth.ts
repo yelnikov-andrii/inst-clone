@@ -1,10 +1,19 @@
 import { url as baseUrl } from "./url";
 
-export async function fetchWithAuth(url: string, options: any = {}) {
+export async function fetchWithAuth(url: string, options: RequestInit = {}) {
     try {
         const accessToken = localStorage.getItem("inst_accessToken");
 
-        const fetchOptions = { ...options, headers: { ...options?.headers, Authorization: `Bearer ${accessToken}` }, credentials: 'include' };
+        const headers: Record<string, string> = {
+            ...(options.headers as Record<string, string>),
+            Authorization: `Bearer ${accessToken}`
+        };
+
+        const fetchOptions: RequestInit = {
+            ...options,
+            headers,
+            credentials: 'include'
+        };
 
         const response = await fetch(url, fetchOptions);
 
@@ -21,12 +30,13 @@ export async function fetchWithAuth(url: string, options: any = {}) {
             if (refreshResponse.ok) {
                 const res = await refreshResponse.json();
                 localStorage.setItem("inst_accessToken", res.accessToken);
-                fetchOptions.headers.Authorization = `Bearer ${accessToken}`;
-                return await fetchWithAuth(url, fetchOptions);
+
+                headers.Authorization = `Bearer ${accessToken}`;
+                return await fetchWithAuth(url, { ...options, headers });
             } else {
                 localStorage.removeItem("inst_user");
                 localStorage.removeItem("inst_aceesToken");
-                // window.location.href = '/login';
+                window.location.href = '/login';
             }
         }
 

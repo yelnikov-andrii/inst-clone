@@ -4,8 +4,9 @@ import { closeModal, openModal } from '../../features/modal/modalSlice';
 import type { RootState } from '../../app/store';
 import ModalForm from '../modalForm/ModalForm';
 import InlineButton from '../ui/InlineButton';
-import { url } from '../../utils/url';
+import UserIcon from '../../images/user-icon.jpg'
 import Avatar from '../common/Avatar';
+import { createProfileUrl } from '../../utils/createProfileUrl';
 
 const RightbarHome = () => {
     const dispatch = useDispatch();
@@ -21,11 +22,13 @@ const RightbarHome = () => {
         }
     }
 
+    const avatarUrl = createProfileUrl(myInfo?.avatar);
+
     return (
         <>
             <div className='flex justify-between items-center mb-4'>
                 <div className='flex gap-2 items-center'>
-                    <Avatar src={myInfo?.avatar ? `${url}/${myInfo?.avatar}` : ''} width={44} height={44} />
+                    <Avatar src={avatarUrl ? avatarUrl : UserIcon} width={44} height={44} />
                     <b className='font-semibold text-sm'>
                         {user?.nickname}
                     </b>

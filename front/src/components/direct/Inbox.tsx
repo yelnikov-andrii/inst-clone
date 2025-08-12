@@ -6,7 +6,8 @@ import type { RootState } from "../../app/store";
 import ModalForm from "../modalForm/ModalForm";
 import UsersList from "./UsersList";
 import Avatar from "../common/Avatar";
-import { url } from "../../utils/url";
+import UserImage from '../../images/user-icon.jpg';
+import { createProfileUrl } from "../../utils/createProfileUrl";
 
 const Inbox = ({ width }: { width: number }) => {
   const dispatch = useDispatch();
@@ -14,11 +15,12 @@ const Inbox = ({ width }: { width: number }) => {
   const user = useSelector((state: RootState) => state.auth.user);
   const myInfo = useSelector((state: RootState) => state.myInfo.myInfo);
 
-
-
   function handleOpen() {
     dispatch(openModal());
   }
+
+  const avatarUrl = createProfileUrl(myInfo?.avatar);
+
   return (
     <>
       <div className='fixed translate-x-[72px] left-0 top-0 bottom-0 bg-white rounded-xl border border-ig-stroke py-4 px-3 flex flex-col'
@@ -42,7 +44,7 @@ const Inbox = ({ width }: { width: number }) => {
           <SearchInput />
         </div>
         <div className="flex flex-col mb-4">
-          <Avatar src={myInfo?.avatar ? `${url}/${myInfo?.avatar}` : ''} width={74} height={74} />
+          <Avatar src={avatarUrl ? avatarUrl : UserImage} width={74} height={74} />
           <p className="text-ig-secondary-text mt-2">
             Ваша нотатка
           </p>

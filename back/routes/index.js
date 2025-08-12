@@ -8,6 +8,7 @@ import { commentsRouter } from './CommentsRouter.js';
 import { savedRouter } from './savedRouter.js';
 import { feedRouter } from './feedRouter.js';
 import { authMiddleware } from '../middleware/auth.js';
+import { userProfile } from './userProfile.js';
 
 export const router = express.Router();
 
@@ -22,3 +23,4 @@ router.use(likesRouter);
 router.use(commentsRouter);
 router.use(savedRouter);
 router.use(feedRouter);
+router.use(userProfile);

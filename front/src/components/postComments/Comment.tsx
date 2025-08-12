@@ -1,4 +1,3 @@
-import { url } from '../../utils/url';
 import Avatar from '../common/Avatar';
 import UserIcon from '../../images/user-icon.jpg';
 import DateCreated from '../common/DateCreated';
@@ -8,20 +7,14 @@ import Modal from '../ui/Modal';
 import DeleteButton from '../postPage/DeleteButton';
 import { useDeleteComment } from '../../hooks/comments/useDeleteComment';
 import Loader from '../ui/Loader';
+import { createProfileUrl } from '../../utils/createProfileUrl';
 
 const Comment = ({ comment, post, getPostComments }: { comment: CommentI, post: PostI | undefined, getPostComments: (postId: number) => void }) => {
-    let avatarUrl = '';
     const [deleteCommentModal, setDeleteCommentModal] = useState(false);
     const [commentWasDeleted, setCommentWasDeleted] = useState(false);
     const { deleteComment, deleteCommentError, loading } = useDeleteComment(setCommentWasDeleted, setDeleteCommentModal);
 
-    if (comment?.Insta_User?.insta_user_info?.avatar) {
-        if (!comment.Insta_User?.insta_user_info.avatar.includes('http')) {
-            avatarUrl = `${url}/${comment.Insta_User?.insta_user_info.avatar}`;
-        } else {
-            avatarUrl = comment.Insta_User?.insta_user_info.avatar;
-        }
-    }
+    const avatarUrl = createProfileUrl(comment?.Insta_User?.insta_user_info?.avatar);
 
     function handleOpenDeleteCommentModal() {
         setDeleteCommentModal(true);

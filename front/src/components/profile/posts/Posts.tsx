@@ -1,26 +1,40 @@
-import { useEffect } from 'react';
-import { useGetPosts } from '../../../hooks/posts/useGetPosts';
+import { CameraIcon } from '../../icons';
 import PostsDefault from './PostsDefault';
-import { useSelector } from 'react-redux';
-import type { RootState } from '../../../app/store';
 import PostsList from './PostsList';
+import { useOutletContext } from 'react-router';
+
+type ProfileOutletContext = {
+  isMyProfile: boolean;
+  profileInfo: ProfileInfoI;
+}
 
 const Posts = () => {
-  const { getAllPosts } = useGetPosts();
-  const posts = useSelector((state: RootState) => state.posts.posts);
-  const user = useSelector((state: RootState) => state.auth.user);
+  const { isMyProfile, profileInfo } = useOutletContext<ProfileOutletContext>();
+  
+  if (isMyProfile && profileInfo?.insta_posts.length === 0) {
+    return (
+      <div className='pt-10 pb-6'>
+        <PostsDefault />
+      </div>
+    )
+  }
 
-  useEffect(() => {
-    if (user) {
-      getAllPosts(user);
-    }
-  }, [user]);
+  if (!isMyProfile && profileInfo?.insta_posts.length === 0) {
+    return (
+      <div className='pt-10 pb-6'>
+        <div className='flex justify-center items-center'>
+          <CameraIcon />
+          <h2 className='font-bold text-3xl my-6'>
+            Ще немає дописів
+          </h2>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className='pt-10 pb-6'>
-      {(posts && posts.length > 0) ? <PostsList /> : (
-        <PostsDefault />
-      )}
+      <PostsList posts={profileInfo?.insta_posts} />
     </div>
   )
 }

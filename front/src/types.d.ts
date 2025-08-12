@@ -93,3 +93,17 @@ interface FeedItemI {
     createdAt: string;
     comment_insts: CommentI[]
 }
+
+interface UserInfoI {
+    avatar: string;
+    bio: string;
+}
+
+interface ProfileInfoI {
+    id: number;
+    createdAt: string;
+    fullname: string;
+    nickname: string;
+    insta_posts: PostI[];
+    insta_user_info: UserInfoI
+}

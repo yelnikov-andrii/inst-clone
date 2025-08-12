@@ -1,13 +1,9 @@
-import { useSelector } from 'react-redux';
-import type { RootState } from '../../../app/store';
 import Post from '../../common/Post';
 
-const PostsList = () => {
-    const posts = useSelector((state: RootState) => state.posts.posts);
-
+const PostsList = ({ posts }: { posts: PostI[]}) => {
     return (
         <div className='flex flex-wrap'>
-            {posts.map(post => (
+            {posts?.map(post => (
                 <Post post={post} key={post.id} />
             ))}
         </div>
