@@ -107,3 +107,26 @@ interface ProfileInfoI {
     insta_posts: PostI[];
     insta_user_info: UserInfoI
 }
+
+interface FollowI {
+    followerId: number;
+    followingId: number;
+    id: number;
+}
+
+interface SubscriberI extends UserI {
+    insta_followers: FollowI;
+}
+
+interface FollowingUserI {
+    id: number;
+    fullname: string;
+    Followers: SubscriberI[];
+    nickname: string;
+}
+interface FollowerUserI {
+    id: number;
+    fullname: string;
+    Following: SubscriberI[];
+    nickname: string;
+}

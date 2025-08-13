@@ -30,7 +30,6 @@ const Comment = ({ comment, post, getPostComments }: { comment: CommentI, post: 
 
     useEffect(() => {
         if (commentWasDeleted && post) {
-            console.log('get comments after deleting')
             getPostComments(post.id);
         }
     }, [commentWasDeleted])

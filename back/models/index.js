@@ -140,3 +140,33 @@ User.hasMany(Saved, {foreignKey: 'userId'});
 Saved.belongsTo(User, {foreignKey: 'userId'});
 
 Saved.sync();
+
+export const Followers = sequelize.define('insta_followers', {
+    id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
+    },
+    followingId: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+    },
+    followerId: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+    }
+});
+
+User.belongsToMany(User, {
+    as: "Followers",
+    through: Followers,
+    foreignKey: "followingId"
+});
+
+User.belongsToMany(User, {
+    as: "Following",
+    through: Followers,
+    foreignKey: "followerId"
+});
+
+Followers.sync();

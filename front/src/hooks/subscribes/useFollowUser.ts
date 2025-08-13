@@ -16,22 +16,21 @@ export const useFollowUser = () => {
             const response = await fetchWithAuth(`${url}/followers`, {
                 method: "POST",
                 credentials: "include",
-                body: JSON.stringify({ followingId: userIdToFoolow, followerId: user?.id }),
+                body: JSON.stringify({ followingId: user?.id, followerId: userIdToFoolow }),
                 headers: {
                     "Content-Type": "application/json"
                 }
             });
 
-            const res = await response.json();
-            setFollowSuccess(res.isFollow);
-
+            if (response.ok) {
+                setFollowSuccess(!followSuccess);
+            }
         } catch (e) {
             if (e instanceof Error) {
                 setFollowError(e.message);
             } else {
                 setFollowError("Помилка, неможливо підписатися на користувача")
             }
-            setFollowSuccess(false);
         } finally {
             setFollowLoading(false);
             setTimeout(() => {

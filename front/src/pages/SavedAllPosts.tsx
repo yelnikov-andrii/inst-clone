@@ -1,4 +1,4 @@
-import { Link } from 'react-router';
+import { Link, Navigate, useParams } from 'react-router';
 import { useSelector } from 'react-redux';
 import type { RootState } from '../app/store';
 import { LeftArrow } from '../components/icons';
@@ -7,7 +7,14 @@ import Topbar from '../components/layout/Topbar';
 import SavedPostsList from '../components/profile/saved/SavedPostsList';
 
 const SavedAllPosts = () => {
-    const nickname = useSelector((state: RootState) => state.auth.user?.nickname);
+    const userNickname = useSelector((state: RootState) => state.auth.user?.nickname);
+    const { nickname } = useParams();
+
+    if (userNickname !== nickname) {
+        return (
+            <Navigate to={`/${nickname}`} replace />
+        )
+    }
 
     return (
         <section className='flex flex-col md:flex-row'>

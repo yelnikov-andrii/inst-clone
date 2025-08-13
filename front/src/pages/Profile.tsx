@@ -13,8 +13,6 @@ const Profile = () => {
   const me = useSelector((state: RootState) => state.auth.user);
   const { profileInfo, loading } = useGetAllInfoAboutUser(nickname);
 
-  console.log(profileInfo, 'profile info')
-
   const isMyProfile = me?.nickname === nickname;
 
   if (loading) {

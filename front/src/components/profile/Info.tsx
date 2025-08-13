@@ -5,6 +5,7 @@ import UserIcon from '../../images/user-icon.jpg'
 import ProfileLink from '../ui/ProfileLink';
 import FollowersInfo from './FollowersInfo';
 import { ParametersIcon } from '../icons';
+import SubscribeAndMessageBtns from './SubscribeAndMessageBtns';
 
 const Info = ({ profileInfo, isMyProfile }: { profileInfo: ProfileInfoI | undefined, isMyProfile: boolean }) => {
     const avatarUrl = createProfileUrl(profileInfo?.insta_user_info?.avatar);
@@ -22,26 +23,27 @@ const Info = ({ profileInfo, isMyProfile }: { profileInfo: ProfileInfoI | undefi
                             {profileInfo?.nickname}
                         </b>
                         {isMyProfile ? (
-                            <>
-                                <div className='flex gap-2 items-center'>
-                                    <ProfileLink title='Редагувати профіль' path='/accounts/edit' />
-                                    <ProfileLink title='Переглянути архів' path='/archive/stories' />
-                                    <button>
-                                        <ParametersIcon />
-                                    </button>
-                                </div></>) : (
                             <div className='flex gap-2 items-center'>
-                                <ProfileLink title='Відстежується' type='button' onClick={() => { }} />
-                                <ProfileLink title='Повідомлення' type='button' onClick={() => { }} />
+                                <ProfileLink title='Редагувати профіль' path='/accounts/edit' />
+                                <ProfileLink title='Переглянути архів' path='/archive/stories' />
+                                <button>
+                                    <ParametersIcon />
+                                </button>
                             </div>
+                        ) : (
+                            profileInfo && (
+                                <SubscribeAndMessageBtns
+                                    profileInfo={profileInfo}
+                                />
+                            )
                         )}
                     </div>
                     <div className='py-2'>
                         {profileInfo?.insta_user_info?.bio}
                     </div>
                     {!screenWidth && (
-                        <FollowersInfo 
-                          profileInfo={profileInfo}
+                        <FollowersInfo
+                            profileInfo={profileInfo}
                         />
                     )}
                 </div>
