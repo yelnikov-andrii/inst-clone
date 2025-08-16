@@ -6,3 +6,4 @@ export const followersRouter = express.Router();
 
 followersRouter.get('/followers', followersController.getFollowers);
 followersRouter.post('/followers', followersController.toggleFollower);
+followersRouter.get('/followers-recommendations/:userId', followersController.getRecommendations)

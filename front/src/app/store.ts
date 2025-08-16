@@ -6,6 +6,7 @@ import authReducer from '../features/auth/authSlice'
 import myInfoReducer from '../features/myInfo/myInfoSlice'
 import postsReducer from '../features/posts/postsSlice'
 import feedReducer from '../features/feed/feedSlice';
+import chatsReducer from '../features/chats/chatsSlice'
 
 export const store = configureStore({
   reducer: {
@@ -16,6 +17,7 @@ export const store = configureStore({
     myInfo: myInfoReducer,
     posts: postsReducer,
     feed: feedReducer,
+    chats: chatsReducer
   },
 })
 

@@ -10,6 +10,9 @@ import { feedRouter } from './feedRouter.js';
 import { authMiddleware } from '../middleware/auth.js';
 import { userProfile } from './userProfile.js';
 import { followersRouter } from './followersRouter.js';
+import { usersRouter } from './usersRouter.js';
+import { chatsRouter } from './chatsRouter.js';
+import { messagesRouter } from './messagesRouter.js';
 
 export const router = express.Router();
 
@@ -25,4 +28,7 @@ router.use(commentsRouter);
 router.use(savedRouter);
 router.use(feedRouter);
 router.use(userProfile);
-router.use(followersRouter)
+router.use(followersRouter);
+router.use(usersRouter);
+router.use(chatsRouter);
+router.use(messagesRouter);

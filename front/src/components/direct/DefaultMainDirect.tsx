@@ -1,7 +1,16 @@
+import { useState } from 'react'
 import { MessagesIconLarge } from '../icons'
-import AuthButton from '../ui/AuthButton'
+import Modal from '../ui/Modal';
+import ChatModal from './ChatModal';
+import PrimaryButton from '../ui/PrimaryButton';
 
 const DefaultMainDirect = () => {
+    const [chatModal, setChatModal] = useState(false);
+
+    function handleClose() {
+        setChatModal(false);
+    }
+
     return (
         <div className='center h-screen'>
             <div className='flex flex-col items-center max-w-[406px]'>
@@ -13,11 +22,16 @@ const DefaultMainDirect = () => {
                     Надсилайте приватні світлини та повідомлення другу або групі
                 </p>
                 <div className='max-w-[195px] text-sm'>
-                    <AuthButton primary>
-                        Надіслати повідомлення
-                    </AuthButton>
+                    <PrimaryButton title="Надіслати повідомлення" onClick={() => setChatModal(true)} />
                 </div>
             </div>
+            {chatModal && (
+                <Modal styleProps={{ width: '50%'}} onClose={handleClose}>
+                    <ChatModal 
+                      handleClose={handleClose}
+                    />
+                </Modal>
+            )}
         </div>
     )
 }

@@ -89,8 +89,8 @@ export const PostMedia = sequelize.define("post_media", {
     }
 });
 
-Post.hasMany(PostMedia, { foreignKey: "postId"});
-PostMedia.belongsTo(Post, { foreignKey: 'postId'});
+Post.hasMany(PostMedia, { foreignKey: "postId" });
+PostMedia.belongsTo(Post, { foreignKey: 'postId' });
 
 PostMedia.sync();
 
@@ -102,11 +102,11 @@ export const Like = sequelize.define('insta_like', {
     }
 });
 
-Post.hasMany(Like, {foreignKey: 'postId'});
-Like.belongsTo(Post, {foreignKey: 'postId'});
+Post.hasMany(Like, { foreignKey: 'postId' });
+Like.belongsTo(Post, { foreignKey: 'postId' });
 
-User.hasMany(Like, {foreignKey: 'userId'});
-Like.belongsTo(User, {foreignKey: 'userId'});
+User.hasMany(Like, { foreignKey: 'userId' });
+Like.belongsTo(User, { foreignKey: 'userId' });
 
 Like.sync();
 
@@ -117,11 +117,11 @@ export const Comment = sequelize.define("comment_inst", {
     }
 });
 
-Post.hasMany(Comment, {foreignKey: 'postId'});
-Comment.belongsTo(Post, {foreignKey: 'postId'});
+Post.hasMany(Comment, { foreignKey: 'postId' });
+Comment.belongsTo(Post, { foreignKey: 'postId' });
 
-User.hasMany(Comment, {foreignKey: 'userId'});
-Comment.belongsTo(User, {foreignKey: 'userId'});
+User.hasMany(Comment, { foreignKey: 'userId' });
+Comment.belongsTo(User, { foreignKey: 'userId' });
 
 Comment.sync();
 
@@ -133,11 +133,11 @@ export const Saved = sequelize.define('insta_saved', {
     }
 });
 
-Post.hasMany(Saved, {foreignKey: 'postId'});
-Saved.belongsTo(Post, {foreignKey: 'postId'});
+Post.hasMany(Saved, { foreignKey: 'postId' });
+Saved.belongsTo(Post, { foreignKey: 'postId' });
 
-User.hasMany(Saved, {foreignKey: 'userId'});
-Saved.belongsTo(User, {foreignKey: 'userId'});
+User.hasMany(Saved, { foreignKey: 'userId' });
+Saved.belongsTo(User, { foreignKey: 'userId' });
 
 Saved.sync();
 
@@ -170,3 +170,55 @@ User.belongsToMany(User, {
 });
 
 Followers.sync();
+
+export const Chat = sequelize.define('inst_chat', {
+    id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
+    },
+    senderId: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+    },
+    recipientId: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+    }
+});
+
+Chat.belongsTo(User, { as: 'Sender', foreignKey: "senderId" });
+Chat.belongsTo(User, { as: "Recipient", foreignKey: "recipientId" });
+
+Chat.sync();
+
+export const Message = sequelize.define('inst_messages', {
+    id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
+    },
+    senderId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: { model: User, key: 'id' }
+    },
+    recipientId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: { model: User, key: 'id' }
+    },
+    chatId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: { model: Chat, key: 'id' }
+    },
+    text: {
+        type: DataTypes.TEXT,
+        allowNull: false
+    }
+});
+
+Chat.hasMany(Message, { foreignKey: "chatId" });
+Message.belongsTo(Chat, { foreignKey: 'chatId' });
+Message.sync();

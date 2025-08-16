@@ -7,14 +7,16 @@ import ProfileLink from "../ui/ProfileLink"
 import { useFollowUser } from "../../hooks/subscribes/useFollowUser"
 import { useSelector } from "react-redux"
 import type { RootState } from "../../app/store"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { useGetFollowing } from "../../hooks/subscribes/useGetFollowing"
 import { Link } from "react-router"
+import { useSearch } from "../../hooks/userSearch"
 
 const FollowersBlock = ({ users, handleClose, text, toggleFollow }: { users: SubscriberI[], handleClose: () => void, text: string, toggleFollow: () => void }) => {
     const { followUser, followSuccess, followLoading } = useFollowUser();
     const user = useSelector((state: RootState) => state.auth.user);
     const { followingUser } = useGetFollowing(user?.id, followSuccess);
+    const [filteredUsers, setFilteredUsers] = useState(users);
 
     function handleFollow(userId: number) {
         followUser(userId)
@@ -25,6 +27,23 @@ const FollowersBlock = ({ users, handleClose, text, toggleFollow }: { users: Sub
             toggleFollow();
         }
     }, [followSuccess, followLoading])
+
+    const { search, appliedSearch, handleChangeSearchInput } = useSearch();
+
+    useEffect(() => {
+        if (appliedSearch) {
+            const filteredUsers = users.filter((user: UserI) => {
+                if (user.fullname.toLowerCase().includes(appliedSearch.toLowerCase()) || user.nickname.toLowerCase().includes(appliedSearch.toLowerCase())) {
+                    return user;
+                }
+            });
+
+            setFilteredUsers(filteredUsers);
+        } else {
+            setFilteredUsers(users);
+        }
+    }, [appliedSearch, users]);
+
     return (
         <div className="py-2 px-3 rounded-lg">
             <div className="flex justify-between">
@@ -36,14 +55,19 @@ const FollowersBlock = ({ users, handleClose, text, toggleFollow }: { users: Sub
                     <CloseIcon />
                 </button>
             </div>
-            <input />
+            <input
+                value={search}
+                onChange={handleChangeSearchInput}
+                className="w-full py-2 px-4 bg-ig-highlight-background rounded-lg mt-2 mb-4 placeholder:text-ig-secondary-text"
+                placeholder="Пошук"
+            />
             <div className="flex flex-col gap-2">
-                {users?.length === 0 ? (
+                {filteredUsers?.length === 0 ? (
                     <div>
                         Користувачі відсутні
                     </div>
                 ) : (
-                    users.map(subscriber => {
+                    filteredUsers.map(subscriber => {
                         const avatarUrl = createProfileUrl(subscriber?.insta_user_info?.avatar);
                         const isFollowing = followingUser?.Followers.some(sub => sub.id === subscriber.id);
                         const isMyProfile = subscriber.id === user?.id;
@@ -73,6 +97,7 @@ const FollowersBlock = ({ users, handleClose, text, toggleFollow }: { users: Sub
                                                 onClick={() => {
                                                     handleFollow(subscriber.id)
                                                 }}
+                                                width={120}
                                             />
                                         )
                                     )}

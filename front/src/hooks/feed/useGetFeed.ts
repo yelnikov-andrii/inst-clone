@@ -37,7 +37,6 @@ export const useGetFeed = () => {
 
     useEffect(() => {
         if (user) {
-            console.log('get feed in useeffect')
             getFeed();
         }
     }, [user]);

@@ -7,16 +7,10 @@ interface RegistrationDataI {
 
 interface MessageI {
     id: number;
-    sender_id: number;
+    senderId: number;
+    recipientId: number;
     text: string;
     created: string;
-}
-
-interface ConversationI {
-    id: number;
-    sender_one_id: number;
-    sender_two_id: number;
-    messages: MessageI[];
 }
 
 interface UserI {
@@ -129,4 +123,13 @@ interface FollowerUserI {
     fullname: string;
     Following: SubscriberI[];
     nickname: string;
+}
+
+interface ChatI {
+    Recipient: UserI;
+    Sender: UserI;
+    id: number;
+    recipientId: number;
+    senderId: number;
+    inst_messages: MessageI[];
 }

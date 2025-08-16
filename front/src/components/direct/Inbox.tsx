@@ -4,10 +4,10 @@ import { openModal } from "../../features/modal/modalSlice";
 import SearchInput from "../layout/SearchInput";
 import type { RootState } from "../../app/store";
 import ModalForm from "../modalForm/ModalForm";
-import UsersList from "./UsersList";
 import Avatar from "../common/Avatar";
 import UserImage from '../../images/user-icon.jpg';
 import { createProfileUrl } from "../../utils/createProfileUrl";
+import ChatList from "./ChatList";
 
 const Inbox = ({ width }: { width: number }) => {
   const dispatch = useDispatch();
@@ -50,7 +50,7 @@ const Inbox = ({ width }: { width: number }) => {
           </p>
         </div>
         <div className="overflow-y-auto grow">
-          <UsersList />
+          <ChatList />
         </div>
       </div>
       {

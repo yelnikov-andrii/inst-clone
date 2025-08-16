@@ -1,3 +1,4 @@
+import { Op } from "sequelize";
 import { Followers, User, UserInfo } from "../models/index.js";
 import { ApiError } from "../utils/ApiError.js";
 
@@ -80,7 +81,44 @@ async function getFollowers(req, res) {
 
 }
 
+async function getRecommendations(req, res) {
+    try {
+        const { userId } = req.params;
+
+        if (userId) {
+            const allFollowers = await Followers.findAll();
+            const ids = [];
+
+            for (let follower of allFollowers) {
+                if (follower.followingId === +userId) {
+                    ids.push(follower.followerId);
+                }
+            }
+
+            const recommendations = await User.findAll({
+                where: {
+                    id: {
+                        [Op.notIn]: ids
+                    }
+                },
+                attributes: ["id", "fullname", "nickname", "createdAt"],
+                include: [{
+                    model: UserInfo,
+                    attributes: ["id", "avatar"]
+                }]
+            })
+
+            res.status(200).json(recommendations);
+        }
+    } catch (e) {
+        console.log(e)
+        res.status(e.status || 500).json({ message: e.message || 'Помилка сервера' });
+    }
+
+}
+
 export const followersController = {
     toggleFollower,
-    getFollowers
+    getFollowers,
+    getRecommendations
 }

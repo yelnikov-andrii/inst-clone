@@ -119,6 +119,10 @@ button {
   outline: none;
 }
 
+button:disabled {
+  cursor: default;
+}
+
 .right-shift {
   right: calc(100% - 244px);
 }

@@ -5,6 +5,7 @@ import { useNavigate } from "react-router";
 import { clearMyInfo } from "../../features/myInfo/myInfoSlice";
 import { clearPosts } from "../../features/posts/postsSlice";
 import { clearFeed } from "../../features/feed/feedSlice";
+import { clearChats } from "../../features/chats/chatsSlice";
 
 export const useLogout = () => {
     const dispatch = useDispatch();
@@ -28,7 +29,7 @@ export const useLogout = () => {
             dispatch(clearMyInfo());
             dispatch(clearPosts());
             dispatch(clearFeed());
-
+            dispatch(clearChats());
             navigate('/accounts/login');
         }
     }
