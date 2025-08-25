@@ -11,6 +11,7 @@ interface MessageI {
     recipientId: number;
     text: string;
     created: string;
+    chatId: number;
 }
 
 interface UserI {

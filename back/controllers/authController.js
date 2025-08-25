@@ -41,19 +41,29 @@ function normalizeUser(user) {
 }
 
 async function login(req, res) {
-    const { login, password } = req.body;
+    try {
+        const { login, password } = req.body;
 
-    const isEmail = !UserService.validateLogin(login);
+        const isEmail = !UserService.validateLogin(login);
 
-    if (isEmail) {
-        const foundUserByEmail = await UserService.getUserByEmail(login);
-        const userData = normalizeUser(foundUserByEmail);
-        await validateUserDataAndSendAuth(userData, password, res);
+        if (isEmail) {
+            const foundUserByEmail = await UserService.getUserByEmail(login);
+            if (foundUserByEmail) {
+                const userData = normalizeUser(foundUserByEmail);
+                await validateUserDataAndSendAuth(userData, password, res);
+            }
 
-    } else {
-        const foundUserByNickname = await UserService.getUserByNickname(login);
-        const userData = normalizeUser(foundUserByNickname);
-        await validateUserDataAndSendAuth(userData, password, res);
+
+        } else {
+            const foundUserByNickname = await UserService.getUserByNickname(login);
+            if (foundUserByNickname) {
+                const userData = normalizeUser(foundUserByNickname);
+                await validateUserDataAndSendAuth(userData, password, res);
+            }
+
+        }
+    } catch (e) {
+        res.status(e.status || 500).json({ message: e.message || 'Помилка сервера' });
     }
 }
 
@@ -149,8 +159,8 @@ async function refresh(req, res) {
         })
 
 
-    } catch(e) {
-         res.status(e.status || 500).json({ message: e.message || 'Помилка сервера' });
+    } catch (e) {
+        res.status(e.status || 500).json({ message: e.message || 'Помилка сервера' });
     }
 }
 
